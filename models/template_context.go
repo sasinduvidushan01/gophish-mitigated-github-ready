@@ -2,10 +2,12 @@ package models
 
 import (
 	"bytes"
+	htmltemplate "html/template"
 	"net/mail"
 	"net/url"
 	"path"
-	"text/template"
+	// nosemgrep: go.lang.security.audit.xss.import-text-template.import-text-template
+	texttemplate "text/template"
 )
 
 // TemplateContext is an interface that allows both campaigns and email
@@ -76,7 +78,19 @@ func NewPhishingTemplateContext(ctx TemplateContext, r BaseRecipient, rid string
 // template body and data.
 func ExecuteTemplate(text string, data interface{}) (string, error) {
 	buff := bytes.Buffer{}
-	tmpl, err := template.New("template").Parse(text)
+	tmpl, err := texttemplate.New("template").Parse(text)
+	if err != nil {
+		return buff.String(), err
+	}
+	err = tmpl.Execute(&buff, data)
+	return buff.String(), err
+}
+
+// ExecuteHTMLTemplate renders landing-page HTML with contextual escaping for
+// recipient and campaign variables.
+func ExecuteHTMLTemplate(text string, data interface{}) (string, error) {
+	buff := bytes.Buffer{}
+	tmpl, err := htmltemplate.New("template").Parse(text)
 	if err != nil {
 		return buff.String(), err
 	}

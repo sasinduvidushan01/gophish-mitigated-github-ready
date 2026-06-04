@@ -7,15 +7,61 @@ The original source and existing Windows executable were left unchanged.
 
 ## Scope
 
-The Semgrep report identified supply-chain findings in `go.mod` and
+The original Semgrep report identified supply-chain findings in `go.mod` and
 `yarn.lock`. The report did not identify direct application-code findings or
 secrets. The mitigation therefore focuses on dependency modernization and build
 metadata.
+
+## Semgrep Rescan Follow-up
+
+Follow-up date: 2026-06-04
+
+A GitHub Semgrep scan of `sasinduvidushan01/gophish-mitigated-github-ready`
+completed with no blocking findings, but still reported one supply-chain
+finding and 17 non-blocking code findings. This follow-up addresses the
+actionable items from that scan.
+
+- Replaced archived `github.com/gorilla/csrf v1.7.3` with
+  `filippo.io/csrf v0.2.1`, using the `filippo.io/csrf/gorilla` drop-in
+  import path. The Go vulnerability database lists all `gorilla/csrf` versions
+  as affected for CVE-2025-47909, so there is no safe `gorilla/csrf` version
+  to upgrade to.
+- Updated the admin CSRF test to validate the replacement package's security
+  model: cross-site browser requests with an untrusted `Origin` header are
+  rejected. The replacement keeps the compatibility token APIs, but enforces
+  CSRF primarily through Fetch Metadata and origin checks rather than token
+  comparison.
+- Rendered phishing landing-page HTML through `html/template` via
+  `ExecuteHTMLTemplate` so recipient-controlled values are contextually
+  escaped before being written to the response.
+- Added phishing redirect validation so a templated redirect cannot change the
+  configured external host or scheme. Same-origin redirect paths are normalized
+  before use.
+- Normalized admin `next` redirects and middleware redirects through path-based
+  URL construction to keep them same-origin.
+- Removed direct `fmt.Fprintf` JSON response writes and now writes marshaled
+  JSON bytes directly.
+- Added `tls.VersionTLS13` as the minimum version for the Semgrep-reported TLS
+  client configurations.
+- Removed hard-coded certificate verification bypass in the site import HTTP
+  client.
+- Added narrow `nosemgrep` annotations only where the code now performs local
+  validation/escaping or where Semgrep matched non-Django Go templates and test
+  fixture HTML.
+
+Follow-up verification:
+
+- `go test ./...`: passed
+- `go build -trimpath -o gophish-mitigated.exe .`: passed
+- `gophish-mitigated.exe --version`: returned `0.12.1`
+- Current executable SHA-256:
+  `353DB740F9BED48CA64F15613232F48E9DADF15DEB253CA8D671436E97BEA1BC`
 
 ## Changes Made
 
 - Upgraded reported Go dependencies:
   - `github.com/gorilla/csrf` from `v1.6.2` to `v1.7.3`
+    (superseded by the follow-up replacement with `filippo.io/csrf`)
   - `github.com/sirupsen/logrus` from `v1.4.2` to `v1.9.3`
   - `golang.org/x/crypto` from a 2020 pseudo-version to `v0.45.0`
 - Updated the Go directive to `go 1.24.0`.
@@ -42,9 +88,8 @@ metadata.
   - `kind-of`
   - `set-value`
   - `terser`
-- Integrated the `gorilla/csrf` `v1.7.3` plaintext HTTP context requirement
-  with the existing admin-server `UseTLS` setting. TLS deployments retain the
-  stricter origin and Referer validation.
+- Replaced the earlier `gorilla/csrf` plaintext HTTP context integration with
+  `filippo.io/csrf/gorilla`, which does not use `PlaintextHTTPContextKey`.
 - Updated controller login tests to use a real HTTP cookie jar when validating
   CSRF-protected form submissions.
 - Added `build-windows.ps1` for repeatable Windows CGO test/build execution.
@@ -78,7 +123,7 @@ Results:
 - `go build -trimpath -o gophish-mitigated.exe .`: passed
 - `gophish-mitigated.exe --version`: returned `0.12.1`
 - Executable SHA-256:
-  `E0E0703E93FBAFC4A03FF87F3613C83C9BB50B8D9F82014F05FC278A8F029DE0`
+  `353DB740F9BED48CA64F15613232F48E9DADF15DEB253CA8D671436E97BEA1BC`
 
 The SQLite C source emitted compiler warnings about possible local-variable
 addresses. These warnings originate from the pinned legacy SQLite dependency;

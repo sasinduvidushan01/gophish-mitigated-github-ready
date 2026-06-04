@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	csrf "filippo.io/csrf/gorilla"
 	"github.com/NYTimes/gziphandler"
 	"github.com/gophish/gophish/auth"
 	"github.com/gophish/gophish/config"
@@ -21,7 +22,6 @@ import (
 	"github.com/gophish/gophish/models"
 	"github.com/gophish/gophish/util"
 	"github.com/gophish/gophish/worker"
-	"github.com/gorilla/csrf"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -156,11 +156,7 @@ func (as *AdminServer) registerRoutes() {
 		csrf.FieldName("csrf_token"),
 		csrf.Secure(as.config.UseTLS),
 		csrf.TrustedOrigins(as.config.TrustedOrigins))
-	csrfProtectedRouter := csrfHandler(router)
-	var adminHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		csrfContext := context.WithValue(r.Context(), csrf.PlaintextHTTPContextKey, !as.config.UseTLS)
-		csrfProtectedRouter.ServeHTTP(w, r.WithContext(csrfContext))
-	})
+	adminHandler := csrfHandler(router)
 	adminHandler = mid.Use(adminHandler.ServeHTTP, mid.CSRFExceptions, mid.GetContext, mid.ApplySecurityHeaders)
 
 	// Setup GZIP compression
@@ -299,15 +295,25 @@ func (as *AdminServer) UserManagement(w http.ResponseWriter, r *http.Request) {
 }
 
 func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
-	next := "/"
-	url, err := url.Parse(r.FormValue("next"))
-	if err == nil {
-		path := url.EscapedPath()
-		if path != "" {
-			next = "/" + strings.TrimLeft(path, "/")
-		}
+	targetPath := sameOriginRedirectPath(r.FormValue("next"))
+	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
+	http.Redirect(w, r, targetPath, http.StatusFound)
+}
+
+func sameOriginRedirectPath(raw string) string {
+	parsed, err := url.Parse(raw)
+	if err != nil || parsed.IsAbs() || parsed.Host != "" {
+		return "/"
 	}
-	http.Redirect(w, r, next, http.StatusFound)
+	path := parsed.EscapedPath()
+	if path == "" {
+		return "/"
+	}
+	targetPath := "/" + strings.TrimLeft(path, "/")
+	if parsed.RawQuery != "" {
+		targetPath += "?" + parsed.RawQuery
+	}
+	return targetPath
 }
 
 func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request, message string) {

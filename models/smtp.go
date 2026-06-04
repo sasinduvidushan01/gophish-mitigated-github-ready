@@ -115,6 +115,7 @@ func (s *SMTP) GetDialer() (mailer.Dialer, error) {
 	d.TLSConfig = &tls.Config{
 		ServerName:         host,
 		InsecureSkipVerify: s.IgnoreCertErrors,
+		MinVersion:         tls.VersionTLS13,
 	}
 	hostname, err := os.Hostname()
 	if err != nil {

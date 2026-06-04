@@ -414,3 +414,37 @@ func TestRedirectTemplating(t *testing.T) {
 		t.Fatalf("invalid redirect received. expected %s got %s", expectedURL, gotURL)
 	}
 }
+
+func TestValidatePhishRedirectURLAllowsConfiguredHost(t *testing.T) {
+	got, err := validatePhishRedirectURL("http://example.com/{{.RId}}", "http://example.com/1234567")
+	if err != nil {
+		t.Fatalf("expected redirect to be valid: %v", err)
+	}
+	if got != "http://example.com/1234567" {
+		t.Fatalf("unexpected redirect URL received. expected %s got %s", "http://example.com/1234567", got)
+	}
+}
+
+func TestValidatePhishRedirectURLRejectsHostChange(t *testing.T) {
+	_, err := validatePhishRedirectURL("http://example.com/{{.RId}}", "http://evil.example/1234567")
+	if err == nil {
+		t.Fatal("expected redirect host change to be rejected")
+	}
+}
+
+func TestValidatePhishRedirectURLRejectsUnsafeScheme(t *testing.T) {
+	_, err := validatePhishRedirectURL("javascript:alert(1)", "javascript:alert(1)")
+	if err == nil {
+		t.Fatal("expected unsafe redirect scheme to be rejected")
+	}
+}
+
+func TestValidatePhishRedirectURLAllowsSameOriginPath(t *testing.T) {
+	got, err := validatePhishRedirectURL("/training/{{.RId}}", "/training/1234567?complete=true")
+	if err != nil {
+		t.Fatalf("expected same-origin redirect to be valid: %v", err)
+	}
+	if got != "/training/1234567?complete=true" {
+		t.Fatalf("unexpected redirect URL received. expected %s got %s", "/training/1234567?complete=true", got)
+	}
+}

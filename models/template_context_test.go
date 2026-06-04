@@ -45,3 +45,12 @@ func (s *ModelsSuite) TestNewTemplateContext(c *check.C) {
 	c.Assert(err, check.Equals, nil)
 	c.Assert(got, check.DeepEquals, expected)
 }
+
+func (s *ModelsSuite) TestExecuteHTMLTemplateEscapesData(c *check.C) {
+	recipient := BaseRecipient{
+		FirstName: `<script>alert("xss")</script>`,
+	}
+	got, err := ExecuteHTMLTemplate("<p>{{.FirstName}}</p>", recipient)
+	c.Assert(err, check.Equals, nil)
+	c.Assert(got, check.Equals, `<p>&lt;script&gt;alert(&#34;xss&#34;)&lt;/script&gt;</p>`)
+}

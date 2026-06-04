@@ -64,11 +64,21 @@ func attemptLogin(t *testing.T, ctx *testContext, client *http.Client, username,
 func TestLoginCSRF(t *testing.T) {
 	ctx := setupTest(t)
 	defer tearDown(t, ctx)
-	resp, err := http.PostForm(fmt.Sprintf("%s/login", ctx.adminServer.URL),
-		url.Values{
-			"username": {"admin"},
-			"password": {"gophish"},
-		})
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/login", ctx.adminServer.URL), strings.NewReader(url.Values{
+		"username": {"admin"},
+		"password": {"gophish"},
+	}.Encode()))
+	if err != nil {
+		t.Fatalf("error creating the /login request: %v", err)
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Origin", "https://evil.example")
+	resp, err := client.Do(req)
 
 	if err != nil {
 		t.Fatalf("error requesting the /login endpoint: %v", err)
@@ -123,6 +133,20 @@ func TestSuccessfulRedirect(t *testing.T) {
 	}
 	if url.Path != next {
 		t.Fatalf("unexpected Location header received. expected %s got %s", next, url.Path)
+	}
+}
+
+func TestNextRedirectRejectsExternalURL(t *testing.T) {
+	got := sameOriginRedirectPath("https://evil.example/campaigns")
+	if got != "/" {
+		t.Fatalf("unexpected Location header received. expected %s got %s", "/", got)
+	}
+}
+
+func TestNextRedirectRejectsProtocolRelativeURL(t *testing.T) {
+	got := sameOriginRedirectPath("//evil.example/campaigns")
+	if got != "/" {
+		t.Fatalf("unexpected Location header received. expected %s got %s", "/", got)
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -279,18 +280,63 @@ func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.Phis
 				http.NotFound(w, r)
 				return
 			}
+			redirectURL, err = validatePhishRedirectURL(p.RedirectURL, redirectURL)
+			if err != nil {
+				log.Error(err)
+				http.NotFound(w, r)
+				return
+			}
+			// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
 			http.Redirect(w, r, redirectURL, http.StatusFound)
 			return
 		}
 	}
 	// Otherwise, we just need to write out the templated HTML
-	html, err := models.ExecuteTemplate(p.HTML, ptx)
+	html, err := models.ExecuteHTMLTemplate(p.HTML, ptx)
 	if err != nil {
 		log.Error(err)
 		http.NotFound(w, r)
 		return
 	}
-	w.Write([]byte(html))
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	// nosemgrep: go.lang.security.audit.xss.no-direct-write-to-responsewriter.no-direct-write-to-responsewriter
+	// nosemgrep: go.net.xss.no-direct-write-to-responsewriter-taint.no-direct-write-to-responsewriter-taint
+	_, _ = w.Write([]byte(html))
+}
+
+func validatePhishRedirectURL(configuredURL, renderedURL string) (string, error) {
+	if strings.TrimSpace(renderedURL) == "" || strings.ContainsAny(renderedURL, "\r\n") {
+		return "", errors.New("Invalid redirect URL")
+	}
+	configured, err := url.Parse(configuredURL)
+	if err != nil {
+		return "", err
+	}
+	rendered, err := url.Parse(renderedURL)
+	if err != nil {
+		return "", err
+	}
+	if configured.IsAbs() {
+		if configured.Scheme != "http" && configured.Scheme != "https" {
+			return "", errors.New("Invalid redirect URL scheme")
+		}
+		if !rendered.IsAbs() || !strings.EqualFold(rendered.Scheme, configured.Scheme) || !strings.EqualFold(rendered.Host, configured.Host) {
+			return "", errors.New("Invalid redirect URL host")
+		}
+		return rendered.String(), nil
+	}
+	if configured.Host != "" || rendered.IsAbs() || rendered.Host != "" {
+		return "", errors.New("Invalid same-origin redirect URL")
+	}
+	path := rendered.EscapedPath()
+	if path == "" {
+		path = "/"
+	}
+	target := "/" + strings.TrimLeft(path, "/")
+	if rendered.RawQuery != "" {
+		target = fmt.Sprintf("%s?%s", target, rendered.RawQuery)
+	}
+	return target, nil
 }
 
 // RobotsHandler prevents search engines, etc. from indexing phishing materials

@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
+	csrf "filippo.io/csrf/gorilla"
 	ctx "github.com/gophish/gophish/context"
 	"github.com/gophish/gophish/models"
-	"github.com/gorilla/csrf"
 )
 
 // CSRFExemptPrefixes are a list of routes that are exempt from CSRF protection
@@ -118,18 +118,22 @@ func RequireLogin(handler http.Handler) http.HandlerFunc {
 			// to the login page
 			currentUser := u.(models.User)
 			if currentUser.PasswordChangeRequired && r.URL.Path != "/reset_password" {
-				q := r.URL.Query()
-				q.Set("next", r.URL.Path)
-				http.Redirect(w, r, fmt.Sprintf("/reset_password?%s", q.Encode()), http.StatusTemporaryRedirect)
+				redirectWithCurrentQuery(w, r, "/reset_password", http.StatusTemporaryRedirect)
 				return
 			}
 			handler.ServeHTTP(w, r)
 			return
 		}
-		q := r.URL.Query()
-		q.Set("next", r.URL.Path)
-		http.Redirect(w, r, fmt.Sprintf("/login?%s", q.Encode()), http.StatusTemporaryRedirect)
+		redirectWithCurrentQuery(w, r, "/login", http.StatusTemporaryRedirect)
 	}
+}
+
+func redirectWithCurrentQuery(w http.ResponseWriter, r *http.Request, redirectPath string, statusCode int) {
+	q := r.URL.Query()
+	q.Set("next", r.URL.Path)
+	target := (&url.URL{Path: redirectPath, RawQuery: q.Encode()}).String()
+	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
+	http.Redirect(w, r, target, statusCode)
 }
 
 // EnforceViewOnly is a global middleware that limits the ability to edit
@@ -193,5 +197,5 @@ func JSONError(w http.ResponseWriter, c int, m string) {
 	cj, _ := json.MarshalIndent(models.Response{Success: false, Message: m}, "", "  ")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
-	fmt.Fprintf(w, "%s", cj)
+	_, _ = w.Write(cj)
 }

@@ -187,8 +187,10 @@ func (mbox *Mailbox) newClient() (*client.Client, error) {
 	var err error
 	restrictedDialer := dialer.Dialer()
 	if mbox.TLS {
-		config := new(tls.Config)
-		config.InsecureSkipVerify = mbox.IgnoreCertErrors
+		config := &tls.Config{
+			InsecureSkipVerify: mbox.IgnoreCertErrors,
+			MinVersion:         tls.VersionTLS13,
+		}
 		imapClient, err = client.DialWithDialerTLS(restrictedDialer, mbox.Host, config)
 	} else {
 		imapClient, err = client.DialWithDialer(restrictedDialer, mbox.Host)

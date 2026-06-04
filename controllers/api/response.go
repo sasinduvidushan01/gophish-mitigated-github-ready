@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	log "github.com/gophish/gophish/logger"
@@ -18,5 +17,5 @@ func JSONResponse(w http.ResponseWriter, d interface{}, c int) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
-	fmt.Fprintf(w, "%s", dj)
+	_, _ = w.Write(dj)
 }
