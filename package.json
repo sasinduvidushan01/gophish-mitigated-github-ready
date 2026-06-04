@@ -1,0 +1,44 @@
+{
+  "name": "gophish",
+  "version": "0.4.0-dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gophish/gophish.git"
+  },
+  "author": "Jordan Wright",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gophish/gophish/issues"
+  },
+  "homepage": "https://getgophish.com",
+  "packageManager": "npm@11.12.1",
+  "scripts": {
+    "build": "gulp build && webpack --mode production",
+    "build:assets": "gulp build && webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "babel-loader": "^10.1.1",
+    "gulp": "^5.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-cli": "^3.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-terser": "^2.1.0",
+    "terser": "^5.48.0",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
+  },
+  "dependencies": {
+    "zxcvbn": "^4.4.2"
+  },
+  "overrides": {
+    "fsevents": "^2.3.3",
+    "js-yaml": "^4.2.0",
+    "kind-of": "^6.0.3",
+    "set-value": "^4.1.0",
+    "terser": "^5.48.0"
+  }
+}
