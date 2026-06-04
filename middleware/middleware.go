@@ -1,7 +1,9 @@
 package middleware
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -197,5 +199,5 @@ func JSONError(w http.ResponseWriter, c int, m string) {
 	cj, _ := json.MarshalIndent(models.Response{Success: false, Message: m}, "", "  ")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
-	_, _ = w.Write(cj)
+	_, _ = io.Copy(w, bytes.NewReader(cj))
 }

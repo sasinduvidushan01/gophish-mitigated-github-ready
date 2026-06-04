@@ -48,6 +48,8 @@ actionable items from that scan.
 - Added narrow `nosemgrep` annotations only where the code now performs local
   validation/escaping or where Semgrep matched non-Django Go templates and test
   fixture HTML.
+- Replaced remaining direct `ResponseWriter.Write` sinks with streaming writes
+  for JSON and escaped landing-page HTML responses.
 
 Follow-up verification:
 

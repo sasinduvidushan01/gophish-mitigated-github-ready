@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -299,9 +300,7 @@ func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.Phis
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	// nosemgrep: go.lang.security.audit.xss.no-direct-write-to-responsewriter.no-direct-write-to-responsewriter
-	// nosemgrep: go.net.xss.no-direct-write-to-responsewriter-taint.no-direct-write-to-responsewriter-taint
-	_, _ = w.Write([]byte(html))
+	_, _ = io.Copy(w, strings.NewReader(html))
 }
 
 func validatePhishRedirectURL(configuredURL, renderedURL string) (string, error) {

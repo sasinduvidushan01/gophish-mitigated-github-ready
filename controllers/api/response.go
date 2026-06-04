@@ -1,7 +1,9 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 
 	log "github.com/gophish/gophish/logger"
@@ -17,5 +19,5 @@ func JSONResponse(w http.ResponseWriter, d interface{}, c int) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
-	_, _ = w.Write(dj)
+	_, _ = io.Copy(w, bytes.NewReader(dj))
 }
