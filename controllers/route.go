@@ -295,9 +295,7 @@ func (as *AdminServer) UserManagement(w http.ResponseWriter, r *http.Request) {
 
 func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
 	targetPath := sameOriginRedirectPath(r.FormValue("next"))
-	if !strings.HasPrefix(targetPath, "/") || strings.HasPrefix(targetPath, "//") {
-		targetPath = "/"
-	}
+	// codeql[go/bad-redirect-check] False Positive: sameOriginRedirectPath enforces same-origin
 	// codeql[go/unvalidated-url-redirection] False Positive: Validated by sameOriginRedirectPath
 	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
 	http.Redirect(w, r, targetPath, http.StatusFound)
@@ -305,14 +303,22 @@ func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
 
 func sameOriginRedirectPath(raw string) string {
 	parsed, err := url.Parse(raw)
-	if err != nil || parsed.IsAbs() || parsed.Host != "" {
+	// Reject any URL with a scheme, host, or parse error — these indicate external URLs
+	if err != nil || parsed.IsAbs() || parsed.Host != "" || parsed.Scheme != "" {
 		return "/"
 	}
 	path := parsed.EscapedPath()
 	if path == "" {
 		return "/"
 	}
-	targetPath := "/" + strings.TrimLeft(path, "/")
+	// Normalize: strip leading slashes, then re-add exactly one
+	// This prevents protocol-relative URLs like //evil.com
+	path = "/" + strings.TrimLeft(path, "/")
+	// Final safety check: must start with exactly one slash
+	if !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {
+		return "/"
+	}
+	targetPath := path
 	if parsed.RawQuery != "" {
 		targetPath += "?" + parsed.RawQuery
 	}

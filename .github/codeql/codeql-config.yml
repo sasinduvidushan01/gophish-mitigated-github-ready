@@ -1,0 +1,4 @@
+paths-ignore:
+  - 'static/js/src/vendor/**'
+  - 'static/js/dist/**'
+  - 'static/vendor/**'
