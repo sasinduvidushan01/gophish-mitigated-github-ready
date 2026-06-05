@@ -79,6 +79,7 @@ func reportedEmail(t *testing.T, ctx *testContext, rid string) {
 	if err != nil {
 		t.Fatalf("error requesting /report endpoint: %v", err)
 	}
+	defer resp.Body.Close()
 	got := resp.StatusCode
 	expected := http.StatusNoContent
 	if got != expected {
@@ -91,6 +92,7 @@ func reportEmail404(t *testing.T, ctx *testContext, rid string) {
 	if err != nil {
 		t.Fatalf("error requesting /report endpoint: %v", err)
 	}
+	defer resp.Body.Close()
 	got := resp.StatusCode
 	expected := http.StatusNotFound
 	if got != expected {
@@ -236,6 +238,7 @@ func TestNoRecipientID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error requesting /track endpoint: %v", err)
 	}
+	defer resp.Body.Close()
 	got := resp.StatusCode
 	expected := http.StatusNotFound
 	if got != expected {
@@ -246,6 +249,7 @@ func TestNoRecipientID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error requesting /track endpoint: %v", err)
 	}
+	defer resp.Body.Close()
 	got = resp.StatusCode
 	if got != expected {
 		t.Fatalf("invalid status code received for / endpoint. expected %d got %d", expected, got)

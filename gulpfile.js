@@ -18,7 +18,7 @@ var gulp = require('gulp'),
     dest_js_directory = 'static/js/dist/',
     dest_css_directory = 'static/css/dist/';
 
-vendorjs = function () {
+var vendorjs = function () {
     return gulp.src([
             vendor_directory + 'jquery.js',
             vendor_directory + 'bootstrap.min.js',
@@ -48,7 +48,7 @@ vendorjs = function () {
         .pipe(gulp.dest(dest_js_directory));
 }
 
-scripts = function () {
+var scripts = function () {
     // Gophish app files - non-ES6
     return gulp.src([
             app_directory + 'autocomplete.js',
@@ -74,7 +74,7 @@ scripts = function () {
         .pipe(gulp.dest(dest_js_directory + 'app/'));
 }
 
-styles = function () {
+var styles = function () {
     return gulp.src([
             css_directory + 'bootstrap.min.css',
             css_directory + 'main.css',
