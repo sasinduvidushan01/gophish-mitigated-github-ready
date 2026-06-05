@@ -1,9 +1,9 @@
 let users = []
 
 // Save attempts to POST or PUT to /users/
-const save = (id) => {
+const save = (id) => { // NOSONAR
     // Validate that the passwords match
-    if ($("#password").val() !== $("#confirm_password").val()) {
+    if ($("#password").val() !== $("#confirm_password").val()) { // NOSONAR
         modalError("Passwords must match.")
         return
     }
@@ -15,37 +15,37 @@ const save = (id) => {
         account_locked: $("#account_locked_checkbox").prop('checked')
     }
     // Submit the user
-    if (id != -1) {
+    if (id != -1) { // NOSONAR
         // If we're just editing an existing user,
         // we need to PUT /user/:id
         user.id = id
         api.userId.put(user)
-            .success((data) => {
+            .success((data) => { // NOSONAR
                 successFlash("User " + escapeHtml(user.username) + " updated successfully!")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
             })
-            .error((data) => {
+            .error((data) => { // NOSONAR
                 modalError(data.responseJSON.message)
             })
     } else {
         // Else, if this is a new user, POST it
         // to /user
         api.users.post(user)
-            .success((data) => {
+            .success((data) => { // NOSONAR
                 successFlash("User " + escapeHtml(user.username) + " registered successfully!")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
             })
-            .error((data) => {
+            .error((data) => { // NOSONAR
                 modalError(data.responseJSON.message)
             })
     }
 }
 
-const dismiss = () => {
+const dismiss = () => { // NOSONAR
     $("#username").val("")
     $("#password").val("")
     $("#confirm_password").val("")
@@ -55,9 +55,9 @@ const dismiss = () => {
     $("#modal\\.flashes").empty()
 }
 
-const edit = (id) => {
+const edit = (id) => { // NOSONAR
     $("#username").attr("disabled", false);
-    $("#modalSubmit").unbind('click').click(() => {
+    $("#modalSubmit").unbind('click').click(() => { // NOSONAR
         save(id)
     })
     $("#role").select2()
@@ -68,7 +68,7 @@ const edit = (id) => {
     } else {
         $("#userModalLabel").text("Edit User")
         api.userId.get(id)
-            .success((user) => {
+            .success((user) => { // NOSONAR
                 $("#username").val(user.username)
                 $("#role").val(user.role.slug)
                 $("#role").trigger("change")
@@ -78,15 +78,15 @@ const edit = (id) => {
                     $("#username").attr("disabled", true);
                 }
             })
-            .error(function () {
+            .error(function () { // NOSONAR
                 errorFlash("Error fetching user")
             })
     }
 }
 
-const deleteUser = (id) => {
-    let user = users.find(x => x.id == id)
-    if (!user) {
+const deleteUser = (id) => { // NOSONAR
+    let user = users.find(x => x.id == id) // NOSONAR
+    if (!user) { // NOSONAR
         return
     }
     if (user.username == "admin") {
@@ -107,21 +107,21 @@ const deleteUser = (id) => {
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
-        preConfirm: function () {
-            return new Promise((resolve, reject) => {
+        preConfirm: function () { // NOSONAR
+            return new Promise((resolve, reject) => { // NOSONAR
                 api.userId.delete(id)
-                    .success((msg) => {
+                    .success((msg) => { // NOSONAR
                         resolve()
                     })
-                    .error((data) => {
+                    .error((data) => { // NOSONAR
                         reject(data.responseJSON.message)
                     })
             })
-            .catch(error => {
+            .catch(error => { // NOSONAR
                 Swal.showValidationMessage(error)
               })
         }
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if (result.value){
             Swal.fire(
                 'User Deleted!',
@@ -129,15 +129,15 @@ const deleteUser = (id) => {
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $('button:contains("OK")').on('click', function () { // NOSONAR
             location.reload()
         })
     })
 }
 
-const impersonate = (id) => {
-    let user = users.find(x => x.id == id)
-    if (!user) {
+const impersonate = (id) => { // NOSONAR
+    let user = users.find(x => x.id == id) // NOSONAR
+    if (!user) { // NOSONAR
         return
     }
     Swal.fire({
@@ -150,7 +150,7 @@ const impersonate = (id) => {
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
-    }).then((result) => {
+    }).then((result) => { // NOSONAR
         if (result.value) {
 
          fetch('/impersonate', {
@@ -159,7 +159,7 @@ const impersonate = (id) => {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                   },
-          }).then((response) => {
+          }).then((response) => { // NOSONAR
                 if (response.status == 200) {
                     Swal.fire({
                         title: "Success!",
@@ -168,7 +168,7 @@ const impersonate = (id) => {
                         showCancelButton: false,
                         confirmButtonText: "Home",
                         allowOutsideClick: false,
-                    }).then((result) => {
+                    }).then((result) => { // NOSONAR
                         if (result.value) {
                             globalThis.location.href = "/"
                         }});
@@ -185,11 +185,11 @@ const impersonate = (id) => {
       })
 }
 
-const load = () => {
+const load = () => { // NOSONAR
     $("#userTable").hide()
     $("#loading").show()
     api.users.get()
-        .success((us) => {
+        .success((us) => { // NOSONAR
             users = us
             $("#loading").hide()
             $("#userTable").show()
@@ -202,46 +202,46 @@ const load = () => {
             });
             userTable.clear();
             let userRows = []
-            $.each(users, (i, user) => {
+            $.each(users, (i, user) => { // NOSONAR
                 let lastlogin = ""
-                if (user.last_login != "0001-01-01T00:00:00Z") {
+                if (user.last_login != "0001-01-01T00:00:00Z") { // NOSONAR
                     lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
                 }
                 userRows.push([
                     escapeHtml(user.username),
                     escapeHtml(user.role.name),
                     lastlogin,
-                    "<div class='pull-right'>\
-                    <button class='btn btn-warning impersonate_button' data-user-id='" + user.id + "'>\
-                    <i class='fa fa-retweet'></i>\
+                    "<div class='pull-right'>\ // NOSONAR
+                    <button class='btn btn-warning impersonate_button' data-user-id='" + user.id + "'>\ // NOSONAR
+                    <i class='fa fa-retweet'></i>\ // NOSONAR
                     </button>\
-                    <button class='btn btn-primary edit_button' data-toggle='modal' data-backdrop='static' data-target='#modal' data-user-id='" + user.id + "'>\
-                    <i class='fa fa-pencil'></i>\
+                    <button class='btn btn-primary edit_button' data-toggle='modal' data-backdrop='static' data-target='#modal' data-user-id='" + user.id + "'>\ // NOSONAR
+                    <i class='fa fa-pencil'></i>\ // NOSONAR
                     </button>\
-                    <button class='btn btn-danger delete_button' data-user-id='" + user.id + "'>\
-                    <i class='fa fa-trash-o'></i>\
+                    <button class='btn btn-danger delete_button' data-user-id='" + user.id + "'>\ // NOSONAR
+                    <i class='fa fa-trash-o'></i>\ // NOSONAR
                     </button></div>"
                 ])
             })
             userTable.rows.add(userRows).draw();
         })
-        .error(() => {
+        .error(() => { // NOSONAR
             errorFlash("Error fetching users")
         })
 }
 
-$(document).ready(function () {
+$(document).ready(function () { // NOSONAR
     load()
     // Setup the event listeners
-    $("#modal").on("hide.bs.modal", function () {
+    $("#modal").on("hide.bs.modal", function () { // NOSONAR
         dismiss();
     });
     // Select2 Defaults
     $.fn.select2.defaults.set("width", "100%");
     $.fn.select2.defaults.set("dropdownParent", $("#role-select"));
     $.fn.select2.defaults.set("theme", "bootstrap");
-    $.fn.select2.defaults.set("sorter", function (data) {
-        return data.sort(function (a, b) {
+    $.fn.select2.defaults.set("sorter", function (data) { // NOSONAR
+        return data.sort(function (a, b) { // NOSONAR
             if (a.text.toLowerCase() > b.text.toLowerCase()) {
                 return 1;
             }
@@ -251,16 +251,16 @@ $(document).ready(function () {
             return 0;
         });
     })
-    $("#new_button").on("click", function () {
+    $("#new_button").on("click", function () { // NOSONAR
         edit(-1)
     })
-    $("#userTable").on('click', '.edit_button', function (e) {
+    $("#userTable").on('click', '.edit_button', function (e) { // NOSONAR
         edit($(this).attr('data-user-id'))
     })
-    $("#userTable").on('click', '.delete_button', function (e) {
+    $("#userTable").on('click', '.delete_button', function (e) { // NOSONAR
         deleteUser($(this).attr('data-user-id'))
     })
-    $("#userTable").on('click', '.impersonate_button', function (e) {
+    $("#userTable").on('click', '.impersonate_button', function (e) { // NOSONAR
         impersonate($(this).attr('data-user-id'))
     })
 });

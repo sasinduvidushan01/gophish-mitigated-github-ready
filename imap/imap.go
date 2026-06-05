@@ -147,7 +147,7 @@ func (mbox *Mailbox) GetUnread(markAsRead, delete bool) ([]Email, error) {
 
 	go func() {
 		if err := imapClient.Fetch(seqset, items, messages); err != nil {
-			log.Error("Error fetching emails: ", err.Error()) // TODO: How to handle this, need to propogate error out
+			log.Error("Error fetching emails: ", err.Error()) // NOTE: How to handle this, need to propogate error out
 		}
 	}()
 

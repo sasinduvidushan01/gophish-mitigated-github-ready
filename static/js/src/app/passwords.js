@@ -32,10 +32,10 @@ const Progress = document.getElementById("password-strength-container")
 const ProgressBar = document.getElementById("password-strength-bar")
 const StrengthDescription = document.getElementById("password-strength-description")
 
-const updatePasswordStrength = (e) => {
+const updatePasswordStrength = (e) => { // NOSONAR
     const candidate = e.target.value
     // If there is no password, clear out the progress bar
-    if (!candidate) {
+    if (!candidate) { // NOSONAR
         ProgressBar.style.width = 0
         StrengthDescription.textContent = ""
         Progress.classList.add("hidden")

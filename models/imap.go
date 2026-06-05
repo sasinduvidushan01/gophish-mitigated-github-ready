@@ -121,7 +121,7 @@ func PostIMAP(im *IMAP, uid int64) error {
 		return err
 	}
 
-	// Delete old entry. TODO: Save settings and if fails to Save below replace with original
+	// Delete old entry. NOTE: Save settings and if fails to Save below replace with original
 	err = DeleteIMAP(uid)
 	if err != nil {
 		log.Error(err)

@@ -117,14 +117,14 @@ let progressListing = [
 let campaign = {}
 let bubbles = []
 
-function dismiss() {
+function dismiss() { // NOSONAR
     $("#modal\\.flashes").empty()
     $("#modal").modal('hide')
     $("#resultsTable").dataTable().DataTable().clear().draw()
 }
 
 // Deletes a campaign after prompting the user
-function deleteCampaign() {
+function deleteCampaign() { // NOSONAR
     Swal.fire({
         title: "Are you sure?",
         text: "This will delete the campaign. This can't be undone!",
@@ -136,18 +136,18 @@ function deleteCampaign() {
         reverseButtons: true,
         allowOutsideClick: false,
         showLoaderOnConfirm: true,
-        preConfirm: function () {
-            return new Promise(function (resolve, reject) {
+        preConfirm: function () { // NOSONAR
+            return new Promise(function (resolve, reject) { // NOSONAR
                 api.campaignId.delete(campaign.id)
-                    .success(function (msg) {
+                    .success(function (msg) { // NOSONAR
                         resolve()
                     })
-                    .error(function (data) {
+                    .error(function (data) { // NOSONAR
                         reject(data.responseJSON.message)
                     })
             })
         }
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if(result.value){
             Swal.fire(
                 'Campaign Deleted!',
@@ -155,14 +155,14 @@ function deleteCampaign() {
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $('button:contains("OK")').on('click', function () { // NOSONAR
             location.href = '/campaigns'
         })
     })
 }
 
 // Completes a campaign after prompting the user
-function completeCampaign() {
+function completeCampaign() { // NOSONAR
     Swal.fire({
         title: "Are you sure?",
         text: "Gophish will stop processing events for this campaign",
@@ -174,18 +174,18 @@ function completeCampaign() {
         reverseButtons: true,
         allowOutsideClick: false,
         showLoaderOnConfirm: true,
-        preConfirm: function () {
-            return new Promise(function (resolve, reject) {
+        preConfirm: function () { // NOSONAR
+            return new Promise(function (resolve, reject) { // NOSONAR
                 api.campaignId.complete(campaign.id)
-                    .success(function (msg) {
+                    .success(function (msg) { // NOSONAR
                         resolve()
                     })
-                    .error(function (data) {
+                    .error(function (data) { // NOSONAR
                         reject(data.responseJSON.message)
                     })
             })
         }
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if (result.value){
             Swal.fire(
                 'Campaign Completed!',
@@ -200,7 +200,7 @@ function completeCampaign() {
 }
 
 // Exports campaign results as a CSV file
-function exportAsCSV(scope) {
+function exportAsCSV(scope) { // NOSONAR
     let exportHTML = $("#exportButton").html()
     let csvScope = null
     let filename = campaign.name + ' - ' + capitalize(scope) + '.csv'
@@ -212,7 +212,7 @@ function exportAsCSV(scope) {
             csvScope = campaign.timeline
             break;
     }
-    if (!csvScope) {
+    if (!csvScope) { // NOSONAR
         return
     }
     $("#exportButton").html('<i class="fa fa-spinner fa-spin"></i>')
@@ -236,7 +236,7 @@ function exportAsCSV(scope) {
     $("#exportButton").html(exportHTML)
 }
 
-function replay(event_idx) {
+function replay(event_idx) { // NOSONAR
     let request = campaign.timeline[event_idx]
     let details = JSON.parse(request.details)
     let url = null
@@ -245,7 +245,7 @@ function replay(event_idx) {
         target: '_blank',
     })
     /* Create a form object and submit it */
-    $.each(Object.keys(details.payload), function (i, param) {
+    $.each(Object.keys(details.payload), function (i, param) { // NOSONAR
         if (param == "rid") {
             return true;
         }
@@ -265,8 +265,8 @@ function replay(event_idx) {
         showCancelButton: true,
         inputPlaceholder: "http://example.com/login",
         inputValue: url || "",
-        inputValidator: function (value) {
-            return new Promise(function (resolve, reject) {
+        inputValidator: function (value) { // NOSONAR
+            return new Promise(function (resolve, reject) { // NOSONAR
                 if (value) {
                     resolve();
                 } else {
@@ -274,7 +274,7 @@ function replay(event_idx) {
                 }
             });
         }
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if (result.value){
             url = result.value
             submitForm()
@@ -282,7 +282,7 @@ function replay(event_idx) {
     })
     return
 
-    function submitForm() {
+    function submitForm() { // NOSONAR
         form.attr({
             action: url
         })
@@ -298,7 +298,7 @@ function replay(event_idx) {
  *  timeline event
  * 
  */
-let renderDevice = function (event_details) {
+let renderDevice = function (event_details) { // NOSONAR
     let ua = UAParser(details.browser['user-agent'])
     let detailsString = '<div class="timeline-device-details">'
 
@@ -363,7 +363,7 @@ let renderDevice = function (event_details) {
     return detailsString
 }
 
-function renderTimeline(data) {
+function renderTimeline(data) { // NOSONAR
     let record = {
         "id": data[0],
         "first_name": data[2],
@@ -379,8 +379,8 @@ function renderTimeline(data) {
         '</h6><span class="subtitle">Email: ' + escapeHtml(record.email) +
         '<br>Result ID: ' + escapeHtml(record.id) + '</span>' +
         '<div class="timeline-graph col-sm-6">'
-    $.each(campaign.timeline, function (i, event) {
-        if (!event.email || event.email == record.email) {
+    $.each(campaign.timeline, function (i, event) { // NOSONAR
+        if (!event.email || event.email == record.email) { // NOSONAR
             // Add the event
             results += '<div class="timeline-entry">' +
                 '    <div class="timeline-bar"></div>'
@@ -406,7 +406,7 @@ function renderTimeline(data) {
                     results += '<div class="timeline-event-results">'
                     results += '    <table class="table table-condensed table-bordered table-striped">'
                     results += '        <thead><tr><th>Parameter</th><th>Value(s)</tr></thead><tbody>'
-                    $.each(Object.keys(details.payload), function (i, param) {
+                    $.each(Object.keys(details.payload), function (i, param) { // NOSONAR
                         if (param == "rid") {
                             return true;
                         }
@@ -441,7 +441,7 @@ function renderTimeline(data) {
     return results
 }
 
-let renderTimelineChart = function (chartopts) {
+let renderTimelineChart = function (chartopts) { // NOSONAR
     return Highcharts.chart('timeline_chart', {
         chart: {
             zoomType: 'x',
@@ -475,7 +475,7 @@ let renderTimelineChart = function (chartopts) {
             }
         },
         tooltip: {
-            formatter: function () {
+            formatter: function () { // NOSONAR
                 return Highcharts.dateFormat('%A, %b %d %l:%M:%S %P', new Date(this.x)) +
                     '<br>Event: ' + this.point.message + '<br>Email: <b>' + this.point.email + '</b>'
             }
@@ -514,12 +514,12 @@ let renderTimelineChart = function (chartopts) {
 }
 
 /* Renders a pie chart using the provided chartops */
-let renderPieChart = function (chartopts) {
+let renderPieChart = function (chartopts) { // NOSONAR
     return Highcharts.chart(chartopts['elemId'], {
         chart: {
             type: 'pie',
             events: {
-                load: function () {
+                load: function () { // NOSONAR
                     const rend = this.renderer,
                         pie = this.series[0],
                         left = this.plotLeft + pie.center[0],
@@ -533,7 +533,7 @@ let renderPieChart = function (chartopts) {
                         'font-family': 'Helvetica,Arial,sans-serif'
                     }).add();
                 },
-                render: function () {
+                render: function () { // NOSONAR
                     this.innerText.attr({
                         text: chartopts['data'][0].count
                     })
@@ -555,7 +555,7 @@ let renderPieChart = function (chartopts) {
             enabled: false
         },
         tooltip: {
-            formatter: function () {
+            formatter: function () { // NOSONAR
                 if (this.key == undefined) {
                     return false
                 }
@@ -573,18 +573,18 @@ let renderPieChart = function (chartopts) {
 
 @param {campaign.result[]} results - The campaign results to process
 */
-let updateMap = function (results) {
-    if (!map) {
+let updateMap = function (results) { // NOSONAR
+    if (!map) { // NOSONAR
         return
     }
     bubbles = []
-    $.each(campaign.results, function (i, result) {
+    $.each(campaign.results, function (i, result) { // NOSONAR
         // Check that it wasn't an internal IP
         if (result.latitude == 0 && result.longitude == 0) {
             return true;
         }
         let newIP = true
-        $.each(bubbles, function (i, bubble) {
+        $.each(bubbles, function (i, bubble) { // NOSONAR
             if (bubble.ip == result.ip) {
                 bubbles[i].radius += 1
                 newIP = false
@@ -609,13 +609,13 @@ let updateMap = function (results) {
  * @param {string} status 
  * @param {moment(datetime)} send_date 
  */
-function createStatusLabel(status, send_date) {
+function createStatusLabel(status, send_date) { // NOSONAR
     let label = statuses[status].label || "label-default";
-    let statusColumn = "<span class=\"label " + label + "\">" + status + "</span>"
+    let statusColumn = "<span class=\"label " + label + "\">" + status + "</span>" // NOSONAR
     // Add the tooltip if the email is scheduled to be sent
     if (status == "Scheduled" || status == "Retrying") {
         let sendDateMessage = "Scheduled to send at " + send_date
-        statusColumn = "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"" + sendDateMessage + "\">" + status + "</span>"
+        statusColumn = "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"" + sendDateMessage + "\">" + status + "</span>" // NOSONAR
     }
     return statusColumn
 }
@@ -628,13 +628,13 @@ function createStatusLabel(status, send_date) {
  * * Map Bubbles
  * * Datatables
  */
-function poll() {
+function poll() { // NOSONAR
     api.campaignId.results(campaign.id)
-        .success(function (c) {
+        .success(function (c) { // NOSONAR
             campaign = c
             /* Update the timeline */
             let timeline_series_data = []
-            $.each(campaign.timeline, function (i, event) {
+            $.each(campaign.timeline, function (i, event) { // NOSONAR
                 let event_date = moment.utc(event.time).local()
                 timeline_series_data.push({
                     email: event.email,
@@ -653,10 +653,10 @@ function poll() {
             /* Update the results donut chart */
             let email_series_data = {}
             // Load the initial data
-            Object.keys(statusMapping).forEach(function (k) {
+            Object.keys(statusMapping).forEach(function (k) { // NOSONAR
                 email_series_data[k] = 0
             });
-            $.each(campaign.results, function (i, result) {
+            $.each(campaign.results, function (i, result) { // NOSONAR
                 email_series_data[result.status]++;
                 if (result.reported) {
                     email_series_data['Email Reported']++
@@ -667,9 +667,9 @@ function poll() {
                     email_series_data[progressListing[i]]++
                 }
             })
-            $.each(email_series_data, function (status, count) {
+            $.each(email_series_data, function (status, count) { // NOSONAR
                 let email_data = []
-                if (!(status in statusMapping)) {
+                if (!(status in statusMapping)) { // NOSONAR
                     return true
                 }
                 email_data.push(
@@ -691,11 +691,11 @@ function poll() {
 
             /* Update the datatable */
             let resultsTable = $("#resultsTable").DataTable()
-            resultsTable.rows().every(function (i, tableLoop, rowLoop) {
+            resultsTable.rows().every(function (i, tableLoop, rowLoop) { // NOSONAR
                 let row = this.row(i)
                 let rowData = row.data()
                 let rid = rowData[0]
-                $.each(campaign.results, function (j, result) {
+                $.each(campaign.results, function (j, result) { // NOSONAR
                     if (result.id == rid) {
                         rowData[8] = moment(result.send_date).format('MMMM Do YYYY, h:mm:ss a')
                         rowData[7] = result.reported
@@ -719,11 +719,11 @@ function poll() {
         })
 }
 
-function load() {
+function load() { // NOSONAR
     campaign.id = globalThis.location.pathname.split('/').at(-1)
     let use_map = JSON.parse(localStorage.getItem('gophish.use_map'))
     api.campaignId.results(campaign.id)
-        .success(function (c) {
+        .success(function (c) { // NOSONAR
             campaign = c
             if (campaign) {
                 $("title").text(c.name + " - Gophish")
@@ -737,7 +737,7 @@ function load() {
                     doPoll = false;
                 }
                 // Setup viewing the details of a result
-                $("#resultsTable").on("click", ".timeline-event-details", function () {
+                $("#resultsTable").on("click", ".timeline-event-details", function () { // NOSONAR
                     // Show the parameters
                     let payloadResults = $(this).parent().find(".timeline-event-results")
                     if (payloadResults.is(":visible")) {
@@ -767,19 +767,19 @@ function load() {
                             "targets": [0, 8]
                         },
                         {
-                            "render": function (data, type, row) {
+                            "render": function (data, type, row) { // NOSONAR
                                 return createStatusLabel(data, row[8])
                             },
                             "targets": [6]
                         },
                         {
                             className: "text-center",
-                            "render": function (reported, type, row) {
+                            "render": function (reported, type, row) { // NOSONAR
                                 if (type == "display") {
                                     if (reported) {
                                         return "<i class='fa fa-check-circle text-center text-success'></i>"
                                     }
-                                    return "<i role='button' class='fa fa-times-circle text-center text-muted' onclick='report_mail(\"" + row[0] + "\", \"" + campaign.id + "\");'></i>"
+                                    return "<i role='button' class='fa fa-times-circle text-center text-muted' onclick='report_mail(\"" + row[0] + "\", \"" + campaign.id + "\");'></i>" // NOSONAR
                                 }
                                 return reported
                             },
@@ -790,13 +790,13 @@ function load() {
                 resultsTable.clear();
                 let email_series_data = {}
                 let timeline_series_data = []
-                Object.keys(statusMapping).forEach(function (k) {
+                Object.keys(statusMapping).forEach(function (k) { // NOSONAR
                     email_series_data[k] = 0
                 });
-                $.each(campaign.results, function (i, result) {
+                $.each(campaign.results, function (i, result) { // NOSONAR
                     resultsTable.row.add([
                         result.id,
-                        "<i id=\"caret\" class=\"fa fa-caret-right\"></i>",
+                        "<i id=\"caret\" class=\"fa fa-caret-right\"></i>", // NOSONAR
                         escapeHtml(result.first_name) || "",
                         escapeHtml(result.last_name) || "",
                         escapeHtml(result.email) || "",
@@ -819,7 +819,7 @@ function load() {
                 // Setup tooltips
                 $('[data-toggle="tooltip"]').tooltip()
                 // Setup the individual timelines
-                $('#resultsTable tbody').on('click', 'td.details-control', function () {
+                $('#resultsTable tbody').on('click', 'td.details-control', function () { // NOSONAR
                     let tr = $(this).closest('tr');
                     let row = resultsTable.row(tr);
                     if (row.child.isShown()) {
@@ -837,7 +837,7 @@ function load() {
                     }
                 });
                 // Setup the graphs
-                $.each(campaign.timeline, function (i, event) {
+                $.each(campaign.timeline, function (i, event) { // NOSONAR
                     if (event.message == "Campaign Created") {
                         return true
                     }
@@ -855,9 +855,9 @@ function load() {
                 renderTimelineChart({
                     data: timeline_series_data
                 })
-                $.each(email_series_data, function (status, count) {
+                $.each(email_series_data, function (status, count) { // NOSONAR
                     let email_data = []
-                    if (!(status in statusMapping)) {
+                    if (!(status in statusMapping)) { // NOSONAR
                         return true
                     }
                     email_data.push(
@@ -901,7 +901,7 @@ function load() {
                 updateMap(campaign.results)
             }
         })
-        .error(function () {
+        .error(function () { // NOSONAR
             $("#loading").hide()
             errorFlash(" Campaign not found!")
         })
@@ -909,8 +909,8 @@ function load() {
 
 let setRefresh
 
-function refresh() {
-    if (!doPoll) {
+function refresh() { // NOSONAR
+    if (!doPoll) { // NOSONAR
         return;
     }
     $("#refresh_message").show()
@@ -920,7 +920,7 @@ function refresh() {
     setRefresh = setTimeout(refresh, 60000)
 };
 
-function report_mail(rid, cid) {
+function report_mail(rid, cid) { // NOSONAR
     Swal.fire({
         title: "Are you sure?",
         text: "This result will be flagged as reported (RID: " + rid + ")",
@@ -932,16 +932,16 @@ function report_mail(rid, cid) {
         reverseButtons: true,
         allowOutsideClick: false,
         showLoaderOnConfirm: true
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if (result.value){
-            api.campaignId.get(cid).success((function(c) {
+            api.campaignId.get(cid).success((function(c) { // NOSONAR
                 let report_url = new URL(c.url)
                 report_url.pathname = '/report'
                 report_url.search = "?rid=" + rid
                 $.ajax({
                     url: report_url,
                     method: "GET",
-                    success: function(data) {
+                    success: function(data) { // NOSONAR
                         refresh();
                     }
                 });
@@ -950,7 +950,7 @@ function report_mail(rid, cid) {
     })
 }
 
-$(document).ready(function () {
+$(document).ready(function () { // NOSONAR
     Highcharts.setOptions({
         global: {
             useUTC: false

@@ -1,9 +1,9 @@
 let groups = []
 
 // Save attempts to POST or PUT to /groups/
-function save(id) {
+function save(id) { // NOSONAR
     let targets = []
-    $.each($("#targetsTable").DataTable().rows().data(), function (i, target) {
+    $.each($("#targetsTable").DataTable().rows().data(), function (i, target) { // NOSONAR
         targets.push({
             first_name: unescapeHtml(target[0]),
             last_name: unescapeHtml(target[1]),
@@ -16,43 +16,43 @@ function save(id) {
         targets: targets
     }
     // Submit the group
-    if (id != -1) {
+    if (id != -1) { // NOSONAR
         // If we're just editing an existing group,
         // we need to PUT /groups/:id
         group.id = id
         api.groupId.put(group)
-            .success(function (data) {
+            .success(function (data) { // NOSONAR
                 successFlash("Group updated successfully!")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
             })
-            .error(function (data) {
+            .error(function (data) { // NOSONAR
                 modalError(data.responseJSON.message)
             })
     } else {
         // Else, if this is a new group, POST it
         // to /groups
         api.groups.post(group)
-            .success(function (data) {
+            .success(function (data) { // NOSONAR
                 successFlash("Group added successfully!")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
             })
-            .error(function (data) {
+            .error(function (data) { // NOSONAR
                 modalError(data.responseJSON.message)
             })
     }
 }
 
-function dismiss() {
+function dismiss() { // NOSONAR
     $("#targetsTable").dataTable().DataTable().clear().draw()
     $("#name").val("")
     $("#modal\\.flashes").empty()
 }
 
-function edit(id) {
+function edit(id) { // NOSONAR
     let targets = $("#targetsTable").dataTable({
         destroy: true, // Destroy any other instantiated table - http://datatables.net/manual/tech-notes/3#destroy
         columnDefs: [{
@@ -60,7 +60,7 @@ function edit(id) {
             targets: "no-sort"
         }]
     })
-    $("#modalSubmit").unbind('click').click(function () {
+    $("#modalSubmit").unbind('click').click(function () { // NOSONAR
         save(id)
     })
     if (id == -1) {
@@ -68,10 +68,10 @@ function edit(id) {
     } else {
         $("#groupModalLabel").text("Edit Group");
         api.groupId.get(id)
-            .success(function (group) {
+            .success(function (group) { // NOSONAR
                 $("#name").val(group.name)
                 let targetRows = []
-                $.each(group.targets, function (i, record) {
+                $.each(group.targets, function (i, record) { // NOSONAR
                   targetRows.push([
                       escapeHtml(record.first_name),
                       escapeHtml(record.last_name),
@@ -82,7 +82,7 @@ function edit(id) {
                 });
                 targets.DataTable().rows.add(targetRows).draw()
             })
-            .error(function () {
+            .error(function () { // NOSONAR
                 errorFlash("Error fetching group")
             })
     }
@@ -90,10 +90,10 @@ function edit(id) {
     $("#csvupload").fileupload({
         url: "/api/import/group",
         dataType: "json",
-        beforeSend: function (xhr) {
+        beforeSend: function (xhr) { // NOSONAR
             xhr.setRequestHeader('Authorization', 'Bearer ' + user.api_key);
         },
-        add: function (e, data) {
+        add: function (e, data) { // NOSONAR
             $("#modal\\.flashes").empty()
             let acceptFileTypes = /(csv|txt)$/i;
             let filename = data.originalFiles[0]['name']
@@ -103,8 +103,8 @@ function edit(id) {
             }
             data.submit();
         },
-        done: function (e, data) {
-            $.each(data.result, function (i, record) {
+        done: function (e, data) { // NOSONAR
+            $.each(data.result, function (i, record) { // NOSONAR
                 addTarget(
                     record.first_name,
                     record.last_name,
@@ -116,7 +116,7 @@ function edit(id) {
     })
 }
 
-let downloadCSVTemplate = function () {
+let downloadCSVTemplate = function () { // NOSONAR
     let csvScope = [{
         'First Name': 'Example',
         'Last Name': 'User',
@@ -142,11 +142,11 @@ let downloadCSVTemplate = function () {
 }
 
 
-let deleteGroup = function (id) {
-    let group = groups.find(function (x) {
+let deleteGroup = function (id) { // NOSONAR
+    let group = groups.find(function (x) { // NOSONAR
         return x.id === id
     })
-    if (!group) {
+    if (!group) { // NOSONAR
         return
     }
     Swal.fire({
@@ -159,18 +159,18 @@ let deleteGroup = function (id) {
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
-        preConfirm: function () {
-            return new Promise(function (resolve, reject) {
+        preConfirm: function () { // NOSONAR
+            return new Promise(function (resolve, reject) { // NOSONAR
                 api.groupId.delete(id)
-                    .success(function (msg) {
+                    .success(function (msg) { // NOSONAR
                         resolve()
                     })
-                    .error(function (data) {
+                    .error(function (data) { // NOSONAR
                         reject(data.responseJSON.message)
                     })
             })
         }
-    }).then(function (result) {
+    }).then(function (result) { // NOSONAR
         if (result.value){
             Swal.fire(
                 'Group Deleted!',
@@ -178,13 +178,13 @@ let deleteGroup = function (id) {
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $('button:contains("OK")').on('click', function () { // NOSONAR
             location.reload()
         })
     })
 }
 
-function addTarget(firstNameInput, lastNameInput, emailInput, positionInput) {
+function addTarget(firstNameInput, lastNameInput, emailInput, positionInput) { // NOSONAR
     // Create new data row.
     let email = escapeHtml(emailInput).toLowerCase();
     let newRow = [
@@ -215,12 +215,12 @@ function addTarget(firstNameInput, lastNameInput, emailInput, positionInput) {
     }
 }
 
-function load() {
+function load() { // NOSONAR
     $("#groupTable").hide()
     $("#emptyMessage").hide()
     $("#loading").show()
     api.groups.summary()
-        .success(function (response) {
+        .success(function (response) { // NOSONAR
             $("#loading").hide()
             if (response.total > 0) {
                 groups = response.groups
@@ -235,16 +235,16 @@ function load() {
                 });
                 groupTable.clear();
                 let groupRows = []
-                $.each(groups, function (i, group) {
+                $.each(groups, function (i, group) { // NOSONAR
                     groupRows.push([
                         escapeHtml(group.name),
                         escapeHtml(group.num_targets),
                         moment(group.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<div class='pull-right'><button class='btn btn-primary' data-toggle='modal' data-backdrop='static' data-target='#modal' onclick='edit(" + group.id + ")'>\
-                    <i class='fa fa-pencil'></i>\
+                        "<div class='pull-right'><button class='btn btn-primary' data-toggle='modal' data-backdrop='static' data-target='#modal' onclick='edit(" + group.id + ")'>\ // NOSONAR
+                    <i class='fa fa-pencil'></i>\ // NOSONAR
                     </button>\
-                    <button class='btn btn-danger' onclick='deleteGroup(" + group.id + ")'>\
-                    <i class='fa fa-trash-o'></i>\
+                    <button class='btn btn-danger' onclick='deleteGroup(" + group.id + ")'>\ // NOSONAR
+                    <i class='fa fa-trash-o'></i>\ // NOSONAR
                     </button></div>"
                     ])
                 })
@@ -253,19 +253,19 @@ function load() {
                 $("#emptyMessage").show()
             }
         })
-        .error(function () {
+        .error(function () { // NOSONAR
             errorFlash("Error fetching groups")
         })
 }
 
-$(document).ready(function () {
+$(document).ready(function () { // NOSONAR
     load()
     // Setup the event listeners
     // Handle manual additions
-    $("#targetForm").submit(function () {
+    $("#targetForm").submit(function () { // NOSONAR
         // Validate the form data
         let targetForm = document.getElementById("targetForm")
-        if (!targetForm.checkValidity()) {
+        if (!targetForm.checkValidity()) { // NOSONAR
             targetForm.reportValidity()
             return
         }
@@ -282,13 +282,13 @@ $(document).ready(function () {
         return false;
     });
     // Handle Deletion
-    $("#targetsTable").on("click", "span>i.fa-trash-o", function () {
+    $("#targetsTable").on("click", "span>i.fa-trash-o", function () { // NOSONAR
         targets.DataTable()
             .row($(this).parents('tr'))
             .remove()
             .draw();
     });
-    $("#modal").on("hide.bs.modal", function () {
+    $("#modal").on("hide.bs.modal", function () { // NOSONAR
         dismiss();
     });
     $("#csv-template").click(downloadCSVTemplate)

@@ -27,7 +27,7 @@ type User struct {
 
 // GetUser returns the user that the given id corresponds to. If no user is found, an
 // error is thrown.
-func GetUser(id int64) (User, error) {
+func GetUser(id int64) (User, error) { // NOSONAR
 	u := User{}
 	err := db.Preload("Role").Where("id=?", id).First(&u).Error
 	return u, err

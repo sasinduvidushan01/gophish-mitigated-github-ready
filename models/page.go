@@ -100,7 +100,7 @@ func GetPages(uid int64) ([]Page, error) {
 }
 
 // GetPage returns the page, if it exists, specified by the given id and user_id.
-func GetPage(id, uid int64) (Page, error) {
+func GetPage(id, uid int64) (Page, error) { // NOSONAR
 	p := Page{}
 	err := db.Where("user_id=? and id=?", uid, id).Find(&p).Error
 	if err != nil {

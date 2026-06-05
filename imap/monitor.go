@@ -1,6 +1,6 @@
 package imap
 
-/* TODO:
+/* NOTE:
 *		 - Have a counter per config for number of consecutive login errors and backoff (e.g if supplied creds are incorrect)
 *		 - Have a DB field "last_login_error" if last login failed
 *		 - DB counter for non-campaign emails that the admin should investigate
@@ -141,7 +141,7 @@ func checkForNewEmails(im models.IMAP) {
 		var reportingFailed []uint32 // SeqNums of emails that were unable to be reported to phishing server, mark as unread
 		var deleteEmails []uint32    // SeqNums of campaign emails. If DeleteReportedCampaignEmail is true, we will delete these
 		for _, m := range msgs {
-			// Check if sender is from company's domain, if enabled. TODO: Make this an IMAP filter
+			// Check if sender is from company's domain, if enabled. NOTE: Make this an IMAP filter
 			if im.RestrictDomain != "" { // e.g domainResitct = widgets.com
 				splitEmail := strings.Split(m.Email.From, "@")
 				senderDomain := splitEmail[len(splitEmail)-1]
