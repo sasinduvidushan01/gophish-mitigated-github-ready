@@ -201,7 +201,7 @@ function completeCampaign() {
 
 // Exports campaign results as a CSV file
 function exportAsCSV(scope) {
-    exportHTML = $("#exportButton").html()
+    let exportHTML = $("#exportButton").html()
     var csvScope = null
     var filename = campaign.name + ' - ' + capitalize(scope) + '.csv'
     switch (scope) {
@@ -237,10 +237,10 @@ function exportAsCSV(scope) {
 }
 
 function replay(event_idx) {
-    request = campaign.timeline[event_idx]
-    details = JSON.parse(request.details)
-    url = null
-    form = $('<form>').attr({
+    let request = campaign.timeline[event_idx]
+    let details = JSON.parse(request.details)
+    let url = null
+    let form = $('<form>').attr({
         method: 'POST',
         target: '_blank',
     })
