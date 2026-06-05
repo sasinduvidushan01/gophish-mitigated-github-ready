@@ -295,6 +295,47 @@ let api = {
 }
 globalThis.api = api
 
+/**
+ * setupMultipleModals – shared bootstrap modal stacking utility.
+ * Called once per page from each page-specific JS file.
+ */
+function setupMultipleModals() {
+    // Code based on http://miles-by-motorcycle.com/static/bootstrap-modal/index.html
+    $('.modal').on('hidden.bs.modal', function () {
+        $(this).removeClass('fv-modal-stack');
+        $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
+    });
+    $('.modal').on('shown.bs.modal', function () {
+        if ($('body').data('fv_open_modals') === undefined) {
+            $('body').data('fv_open_modals', 0);
+        }
+        if ($(this).hasClass('fv-modal-stack')) {
+            return;
+        }
+        $(this).addClass('fv-modal-stack');
+        $('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
+        $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
+        $('.modal-backdrop').not('.fv-modal-stack').css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
+        $('.modal-backdrop').not('fv-modal-stack').addClass('fv-modal-stack');
+    });
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {
+        $(document)
+            .off('focusin.bs.modal')
+            .on('focusin.bs.modal', $.proxy(function (e) {
+                if (
+                    this.$element[0] !== e.target && !this.$element.has(e.target).length &&
+                    !$(e.target).closest('.cke_dialog, .cke').length
+                ) {
+                    this.$element.trigger('focus');
+                }
+            }, this));
+    };
+    // Scrollbar fix – https://stackoverflow.com/questions/19305821/multiple-modals-overlay
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        $('.modal:visible').length && $(document.body).addClass('modal-open');
+    });
+}
+
 // Register our moment.js datatables listeners
 $(document).ready(function () {
     // Setup nav highlighting
