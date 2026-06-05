@@ -167,6 +167,5 @@ func (mm *mockMessage) GetSmtpFrom() (string, error) {
 }
 
 func (mm *mockMessage) Success() error {
-	mm.finished = true
-	return nil
+	return mm.Finish()
 }
