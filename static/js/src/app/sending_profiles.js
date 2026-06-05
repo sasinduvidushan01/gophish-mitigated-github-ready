@@ -195,7 +195,7 @@ function load() {
             $("#loading").hide()
             if (profiles.length > 0) {
                 $("#profileTable").show()
-                profileTable = $("#profileTable").DataTable({
+                let profileTable = $("#profileTable").DataTable({
                     destroy: true,
                     columnDefs: [{
                         orderable: false,
@@ -203,7 +203,7 @@ function load() {
                     }]
                 });
                 profileTable.clear()
-                profileRows = []
+                let profileRows = []
                 $.each(profiles, function (i, profile) {
                     profileRows.push([
                         escapeHtml(profile.name),
@@ -311,8 +311,8 @@ $(document).ready(function () {
     })
     // Code to deal with custom email headers
     $("#addCustomHeader").on('click', function () {
-        headerKey = $("#headerKey").val();
-        headerValue = $("#headerValue").val();
+        let headerKey = $(this).find("input.headerKey").val();
+        let headerValue = $(this).find("input.headerValue").val();
 
         if (headerKey == "" || headerValue == "") {
             return false;

@@ -201,11 +201,11 @@ const load = () => {
                 }]
             });
             userTable.clear();
-            userRows = []
+            let userRows = []
             $.each(users, (i, user) => {
-                lastlogin = ""
+                let lastlogin = ""
                 if (user.last_login != "0001-01-01T00:00:00Z") {
-                    lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
+                    let lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
                 }
                 userRows.push([
                     escapeHtml(user.username),

@@ -71,7 +71,7 @@ function edit(id) {
         api.groupId.get(id)
             .success(function (group) {
                 $("#name").val(group.name)
-                targetRows = []
+                let targetRows = []
                 $.each(group.targets, function (i, record) {
                   targetRows.push([
                       escapeHtml(record.first_name),
@@ -235,7 +235,7 @@ function load() {
                     }]
                 });
                 groupTable.clear();
-                groupRows = []
+                let groupRows = []
                 $.each(groups, function (i, group) {
                     groupRows.push([
                         escapeHtml(group.name),

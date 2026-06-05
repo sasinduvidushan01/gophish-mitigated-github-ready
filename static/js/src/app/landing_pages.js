@@ -10,7 +10,7 @@ let pages = []
 function save(idx) {
     let page = {}
     page.name = $("#name").val()
-    editor = CKEDITOR.instances["html_editor"]
+    let editor = CKEDITOR.instances["html_editor"]
     page.html = editor.getData()
     page.capture_credentials = $("#capture_credentials_checkbox").prop("checked")
     page.capture_passwords = $("#capture_passwords_checkbox").prop("checked")

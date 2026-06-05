@@ -98,7 +98,7 @@ function sendTestEmail() {
             name: $("#profile").select2("data")[0].text
         }
     }
-    btnHtml = $("#sendTestModalSubmit").html()
+    let btnHtml = $("#sendTestModalSubmit").html()
     $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> Sending')
     // Send the test email
     api.send_test_email(test_email_request)
@@ -164,7 +164,7 @@ function deleteCampaign(idx) {
 function setupOptions() {
     api.groups.summary()
         .success(function (summaries) {
-            groups = summaries.groups
+            let groups = summaries.groups
             if (groups.length == 0) {
                 modalError("No groups found!")
                 return false;
@@ -346,7 +346,7 @@ $(document).ready(function () {
                 $("#campaignTable").show()
                 $("#campaignTableArchive").show()
 
-                activeCampaignsTable = $("#campaignTable").DataTable({
+                let activeCampaignsTable = $("#campaignTable").DataTable({
                     columnDefs: [{
                         orderable: false,
                         targets: "no-sort"
@@ -355,7 +355,7 @@ $(document).ready(function () {
                         [1, "desc"]
                     ]
                 });
-                archivedCampaignsTable = $("#campaignTableArchive").DataTable({
+                let archivedCampaignsTable = $("#campaignTableArchive").DataTable({
                     columnDefs: [{
                         orderable: false,
                         targets: "no-sort"
@@ -364,21 +364,22 @@ $(document).ready(function () {
                         [1, "desc"]
                     ]
                 });
-                rows = {
+                let rows = {
                     'active': [],
                     'archived': []
                 }
                 $.each(campaigns, function (i, campaign) {
-                    label = labels[campaign.status] || "label-default";
+                    let label = labels[campaign.status] || "label-default";
 
                     //section for tooltips on the status of a campaign to show some quick stats
                     let launchDate;
+                    let quickStats;
                     if (moment(campaign.launch_date).isAfter(moment())) {
                         launchDate = "Scheduled to start: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
+                        quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
                     } else {
                         launchDate = "Launch Date: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
+                        quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
                     }
 
                     let row = [

@@ -126,7 +126,7 @@ function deleteTemplate(idx) {
 }
 
 function attach(files) {
-    attachmentsTable = $("#attachmentsTable").DataTable({
+    let attachmentsTable = $("#attachmentsTable").DataTable({
         destroy: true,
         "order": [
             [1, "asc"]
@@ -170,7 +170,7 @@ function edit(idx) {
     $("#html_editor").ckeditor()
     setupAutocomplete(CKEDITOR.instances["html_editor"])
     $("#attachmentsTable").show()
-    attachmentsTable = $('#attachmentsTable').DataTable({
+    let attachmentsTable = $('#attachmentsTable').DataTable({
         destroy: true,
         "order": [
             [1, "asc"]
@@ -194,7 +194,7 @@ function edit(idx) {
         $("#envelope-sender").val(template.envelope_sender)
         $("#html_editor").val(template.html)
         $("#text_editor").val(template.text)
-        attachmentRows = []
+        let attachmentRows = []
         $.each(template.attachments, function (i, file) {
             let icon = icons[file.type] || "fa-file-o"
             // Add the record to the modal
@@ -233,7 +233,7 @@ function copy(idx) {
     })
     $("#html_editor").ckeditor()
     $("#attachmentsTable").show()
-    attachmentsTable = $('#attachmentsTable').DataTable({
+    let attachmentsTable = $('#attachmentsTable').DataTable({
         destroy: true,
         "order": [
             [1, "asc"]
@@ -280,8 +280,8 @@ function copy(idx) {
 }
 
 function importEmail() {
-    raw = $("#email_content").val()
-    convert_links = $("#convert_links_checkbox").prop("checked")
+    let raw = $("#email_content").val()
+    let convert_links = $("#convert_links_checkbox").prop("checked")
     if (!raw) {
         modalError("No Content Specified!")
     } else {
@@ -316,7 +316,7 @@ function load() {
             $("#loading").hide()
             if (templates.length > 0) {
                 $("#templateTable").show()
-                templateTable = $("#templateTable").DataTable({
+                let templateTable = $("#templateTable").DataTable({
                     destroy: true,
                     columnDefs: [{
                         orderable: false,
@@ -324,7 +324,7 @@ function load() {
                     }]
                 });
                 templateTable.clear()
-                templateRows = []
+                let templateRows = []
                 $.each(templates, function (i, template) {
                     templateRows.push([
                         escapeHtml(template.name),

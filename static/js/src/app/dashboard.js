@@ -326,18 +326,19 @@ $(document).ready(function () {
                         [1, "desc"]
                     ]
                 });
-                campaignRows = []
+                let campaignRows = []
                 $.each(campaigns, function (i, campaign) {
                     let campaign_date = moment(campaign.created_date).format('MMMM Do YYYY, h:mm:ss a')
                     let label = statuses[campaign.status].label || "label-default";
                     //section for tooltips on the status of a campaign to show some quick stats
                     let launchDate;
+                    let quickStats;
                     if (moment(campaign.launch_date).isAfter(moment())) {
                         launchDate = "Scheduled to start: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
+                        quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
                     } else {
                         launchDate = "Launch Date: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
+                        quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
                     }
                     // Add it to the list
                     campaignRows.push([

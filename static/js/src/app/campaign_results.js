@@ -238,7 +238,7 @@ function exportAsCSV(scope) {
 
 function replay(event_idx) {
     let request = campaign.timeline[event_idx]
-    let let details = JSON.parse(request.details)
+    let details = JSON.parse(request.details)
     let url = null
     let form = $('<form>').attr({
         method: 'POST',
