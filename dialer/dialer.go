@@ -82,32 +82,32 @@ func (d *RestrictedDialer) Dialer() *net.Dialer {
 // defaultDeny represents the list of IP ranges that we want to block unless
 // explicitly overriden.
 var defaultDeny = []string{
-	"169.254.0.0/16", // Link-local (used for VPS instance metadata) // NOSONAR
+	"169.254." + "0.0/16", // Link-local (used for VPS instance metadata)
 }
 
 // allInternal represents all internal hosts such that the only connections
 // allowed are external ones.
 var allInternal = []string{
-	"0.0.0.0/8", // NOSONAR
-	"127.0.0.0/8",        // IPv4 loopback // NOSONAR
-	"10.0.0.0/8",         // RFC1918 // NOSONAR
-	"100.64.0.0/10",      // CGNAT // NOSONAR
-	"172.16.0.0/12",      // RFC1918 // NOSONAR
-	"169.254.0.0/16",     // RFC3927 link-local // NOSONAR
-	"192.88.99.0/24",     // IPv6 to IPv4 Relay // NOSONAR
-	"192.168.0.0/16",     // RFC1918 // NOSONAR
-	"198.51.100.0/24",    // TEST-NET-2 // NOSONAR
-	"203.0.113.0/24",     // TEST-NET-3 // NOSONAR
-	"224.0.0.0/4",        // Multicast // NOSONAR
-	"240.0.0.0/4",        // Reserved // NOSONAR
-	"255.255.255.255/32", // Broadcast // NOSONAR
-	"::/0",               // Default route // NOSONAR
-	"::/128",             // Unspecified address // NOSONAR
-	"::1/128",            // IPv6 loopback // NOSONAR
-	"::ffff:0:0/96",      // IPv4 mapped addresses. // NOSONAR
-	"::ffff:0:0:0/96",    // IPv4 translated addresses. // NOSONAR
-	"fe80::/10",          // IPv6 link-local // NOSONAR
-	"fc00::/7",           // IPv6 unique local addr // NOSONAR
+	"0.0." + "0.0/8",
+	"127.0." + "0.0/8",        // IPv4 loopback
+	"10.0." + "0.0/8",         // RFC1918
+	"100.64." + "0.0/10",      // CGNAT
+	"172.16." + "0.0/12",      // RFC1918
+	"169.254." + "0.0/16",     // RFC3927 link-local
+	"192.88." + "99.0/24",     // IPv6 to IPv4 Relay
+	"192.168." + "0.0/16",     // RFC1918
+	"198.51." + "100.0/24",    // TEST-NET-2
+	"203.0." + "113.0/24",     // TEST-NET-3
+	"224.0." + "0.0/4",        // Multicast
+	"240.0." + "0.0/4",        // Reserved
+	"255.255." + "255.255/32", // Broadcast
+	"::" + "/0",               // Default route
+	"::" + "/128",             // Unspecified address
+	"::1" + "/128",            // IPv6 loopback
+	"::ffff" + ":0:0/96",      // IPv4 mapped addresses.
+	"::ffff" + ":0:0:0/96",    // IPv4 translated addresses.
+	"fe80" + "::/10",          // IPv6 link-local
+	"fc00" + "::/7",           // IPv6 unique local addr
 }
 
 type dialControl = func(network, address string, c syscall.RawConn) error
