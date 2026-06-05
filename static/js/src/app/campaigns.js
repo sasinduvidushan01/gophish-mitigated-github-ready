@@ -26,7 +26,7 @@ function launch() {
         showLoaderOnConfirm: true,
         preConfirm: function () {
             return new Promise(function (resolve, reject) {
-                groups = []
+                let groups = []
                 $("#users").select2("data").forEach(function (group) {
                     groups.push({
                         name: group.text

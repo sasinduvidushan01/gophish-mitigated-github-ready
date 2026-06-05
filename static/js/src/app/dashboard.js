@@ -266,7 +266,7 @@ function generateTimelineChart(campaigns) {
                 point: {
                     events: {
                         click: function (e) {
-                            window.location.href = "/campaigns/" + this.campaign_id
+                            globalThis.location.href = "/campaigns/" + this.campaign_id
                         }
                     }
                 }
@@ -296,7 +296,7 @@ $(document).ready(function () {
             if (campaigns.length > 0) {
                 $("#dashboard").show()
                 // Create the overview chart data
-                campaignTable = $("#campaignTable").DataTable({
+                let campaignTable = $("#campaignTable").DataTable({
                     columnDefs: [{
                             orderable: false,
                             targets: "no-sort"

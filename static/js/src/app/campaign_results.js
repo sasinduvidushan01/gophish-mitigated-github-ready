@@ -225,7 +225,7 @@ function exportAsCSV(scope) {
     if (navigator.msSaveBlob) {
         navigator.msSaveBlob(csvData, filename);
     } else {
-        let csvURL = window.URL.createObjectURL(csvData);
+        let csvURL = globalThis.URL.createObjectURL(csvData);
         let dlLink = document.createElement('a');
         dlLink.href = csvURL;
         dlLink.setAttribute('download', filename)
@@ -238,7 +238,7 @@ function exportAsCSV(scope) {
 
 function replay(event_idx) {
     let request = campaign.timeline[event_idx]
-    let details = JSON.parse(request.details)
+    let let details = JSON.parse(request.details)
     let url = null
     let form = $('<form>').attr({
         method: 'POST',
@@ -374,7 +374,7 @@ function renderTimeline(data) {
         "reported": data[7],
         "send_date": data[8]
     }
-    results = '<div class="timeline col-sm-12 well well-lg">' +
+    let results = '<div class="timeline col-sm-12 well well-lg">' +
         '<h6>Timeline for ' + escapeHtml(record.first_name) + ' ' + escapeHtml(record.last_name) +
         '</h6><span class="subtitle">Email: ' + escapeHtml(record.email) +
         '<br>Result ID: ' + escapeHtml(record.id) + '</span>' +
@@ -719,7 +719,7 @@ function poll() {
 }
 
 function load() {
-    campaign.id = window.location.pathname.split('/').slice(-1)[0]
+    campaign.id = globalThis.location.pathname.split('/').slice(-1)[0]
     let use_map = JSON.parse(localStorage.getItem('gophish.use_map'))
     api.campaignId.results(campaign.id)
         .success(function (c) {
@@ -750,7 +750,7 @@ function load() {
                     }
                 })
                 // Setup the results table
-                resultsTable = $("#resultsTable").DataTable({
+                let resultsTable = $("#resultsTable").DataTable({
                     destroy: true,
                     "order": [
                         [2, "asc"]

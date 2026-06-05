@@ -4,7 +4,7 @@
  * Description: The Gophish gulpfile
  */
 
-var gulp = require('gulp'),
+let gulp = require('gulp'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     terser = require('gulp-terser'),
@@ -18,7 +18,7 @@ var gulp = require('gulp'),
     dest_js_directory = 'static/js/dist/',
     dest_css_directory = 'static/css/dist/';
 
-var vendorjs = function () {
+let vendorjs = function () {
     return gulp.src([
             vendor_directory + 'jquery.js',
             vendor_directory + 'bootstrap.min.js',
@@ -48,7 +48,7 @@ var vendorjs = function () {
         .pipe(gulp.dest(dest_js_directory));
 }
 
-var scripts = function () {
+let scripts = function () {
     // Gophish app files - non-ES6
     return gulp.src([
             app_directory + 'autocomplete.js',
@@ -74,7 +74,7 @@ var scripts = function () {
         .pipe(gulp.dest(dest_js_directory + 'app/'));
 }
 
-var styles = function () {
+let styles = function () {
     return gulp.src([
             css_directory + 'bootstrap.min.css',
             css_directory + 'main.css',
