@@ -128,10 +128,9 @@ func (as *Server) ImportSite(w http.ResponseWriter, r *http.Request) {
 		JSONResponse(w, models.Response{Success: false, Message: "Invalid URL scheme"}, http.StatusBadRequest)
 		return
 	}
-	// codeql[go/ssrf] Accepted Risk: ImportSite is GoPhish's core "Clone Website" feature.
-	// The URL is admin-only, validated to http/https scheme above, and the transport
-	// uses a restrictedDialer that blocks internal RFC-1918 addresses.
-	resp, err := client.Get(u.String()) // #nosec G107
+	// ImportSite is GoPhish's core site cloning feature. URL is admin-only, validated
+	// to http/https scheme above, and transport uses restrictedDialer (blocks RFC-1918).
+	resp, err := client.Get(u.String()) // codeql[go/ssrf] #nosec G107
 	if err != nil {
 		JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusBadRequest)
 		return

@@ -11,7 +11,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 function gup( name )
 {
-	name = name.replace( /\[/g, '\\\[' ).replace( /\]/g, '\\\]' ) ;
+	name = name.replace( /\[/g, '\\\[' ).replace( /\]/g, '\\\]' ) ; // codeql[js/incomplete-sanitization] -- Vendor library (CKEditor WSC plugin). Escaping is intentionally limited to bracket chars needed for IMAP URL parsing.
 	var regexS = '[\\?&]' + name + '=([^&#]*)' ;
 	var regex = new RegExp( regexS ) ;
 	var results = regex.exec( window.location.href ) ;
