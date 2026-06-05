@@ -1,0 +1,38 @@
+# Version control
+.git/
+.gitattributes
+.gitignore
+
+# Secrets and credentials
+*.env
+.env
+config.json
+
+# Compiled binaries / databases
+gophish
+gophish.exe
+gophish-mitigated.exe
+*.db
+*.log
+
+# Go build caches (local dev artifacts)
+.gocache/
+.gomodcache/
+.gotmp/
+
+# Node build artifacts
+node_modules/
+static/js/dist/
+static/css/dist/
+
+# CI/CD
+.github/
+.sonarcloud.properties
+
+# Documentation and non-build files
+*.md
+doc/
+ansible-playbook/
+build-windows.ps1
+GITHUB_UPLOAD_NOTES.md
+MITIGATION_NOTES.md
