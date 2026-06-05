@@ -296,11 +296,11 @@ func (as *AdminServer) UserManagement(w http.ResponseWriter, r *http.Request) {
 
 func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
 	targetPath := sameOriginRedirectPath(r.FormValue("next"))
-	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
-	// codeql[go/unvalidated-url-redirection] False Positive: Validated by sameOriginRedirectPath
 	if !strings.HasPrefix(targetPath, "/") || strings.HasPrefix(targetPath, "//") {
 		targetPath = "/"
 	}
+	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
+	// codeql[go/unvalidated-url-redirection] False Positive: Validated by sameOriginRedirectPath
 	http.Redirect(w, r, targetPath, http.StatusFound)
 }
 
