@@ -107,11 +107,11 @@ function renderPieChart(chartopts) {
             type: 'pie',
             events: {
                 load: function () {
-                    let chart = this,
-                        rend = chart.renderer,
-                        pie = chart.series[0],
-                        left = chart.plotLeft + pie.center[0],
-                        top = chart.plotTop + pie.center[1];
+                    let currentChart = this,
+                        rend = currentChart.renderer,
+                        pie = currentChart.series[0],
+                        left = currentChart.plotLeft + pie.center[0],
+                        top = currentChart.plotTop + pie.center[1];
                     this.innerText = rend.text(chartopts['data'][0].count, left, top).
                     attr({
                         'text-anchor': 'middle',
@@ -191,7 +191,7 @@ function generateStatsPieCharts(campaigns) {
             name: '',
             y: 100 - Math.floor((count / total) * 100)
         })
-        let stats_chart = renderPieChart({
+        renderPieChart({
             elemId: status + '_chart',
             title: status_label,
             name: status,

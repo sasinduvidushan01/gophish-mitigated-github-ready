@@ -86,7 +86,7 @@ let deletePage = function (idx) {
 }
 
 function importSite() {
-    url = $("#url").val()
+    let url = $("#url").val()
     if (!url) {
         modalError("No URL Specified!")
     } else {
@@ -152,7 +152,7 @@ function load() {
             $("#loading").hide()
             if (pages.length > 0) {
                 $("#pagesTable").show()
-                pagesTable = $("#pagesTable").DataTable({
+                let pagesTable = $("#pagesTable").DataTable({
                     destroy: true,
                     columnDefs: [{
                         orderable: false,
@@ -160,7 +160,7 @@ function load() {
                     }]
                 });
                 pagesTable.clear()
-                pageRows = []
+                let pageRows = []
                 $.each(pages, function (i, page) {
                     pageRows.push([
                         escapeHtml(page.name),

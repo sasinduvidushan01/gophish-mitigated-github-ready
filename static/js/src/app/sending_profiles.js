@@ -25,7 +25,7 @@ function sendTestEmail() {
             headers: headers,
         }
     }
-    btnHtml = $("#sendTestModalSubmit").html()
+    let btnHtml = $("#sendTestModalSubmit").html()
     $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> Sending')
     // Send the test email
     api.send_test_email(test_email_request)

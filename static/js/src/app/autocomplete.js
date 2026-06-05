@@ -76,7 +76,7 @@ let matchCallback = function (text, offset) {
 let dataCallback = function (matchInfo, callback) {
     let data = TEMPLATE_TAGS.filter(function (item) {
         let itemName = '{{.' + item.name.toLowerCase() + '}}';
-        return itemName.indexOf(matchInfo.query.toLowerCase()) == 0;
+        return itemName.startsWith(matchInfo.query.toLowerCase());
     });
 
     callback(data);

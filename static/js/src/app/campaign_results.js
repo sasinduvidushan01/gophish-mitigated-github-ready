@@ -231,7 +231,7 @@ function exportAsCSV(scope) {
         dlLink.setAttribute('download', filename)
         document.body.appendChild(dlLink)
         dlLink.click();
-        document.body.removeChild(dlLink)
+        dlLink.remove()
     }
     $("#exportButton").html(exportHTML)
 }
@@ -343,7 +343,7 @@ let renderDevice = function (event_details) {
     let browserIcon = 'info-circle'
     let browserVersion = ''
 
-    if (ua.browser && ua.browser.name) {
+    if (ua.browser?.name) {
         deviceBrowser = ua.browser.name
         // Handle the "mobile safari" case
         deviceBrowser = deviceBrowser.replace('Mobile ', '')
@@ -364,7 +364,7 @@ let renderDevice = function (event_details) {
 }
 
 function renderTimeline(data) {
-    record = {
+    let record = {
         "id": data[0],
         "first_name": data[2],
         "last_name": data[3],
@@ -390,9 +390,9 @@ function renderTimeline(data) {
                 '    <div class="timeline-message">' + escapeHtml(event.message) +
                 '    <span class="timeline-date">' + moment.utc(event.time).local().format('MMMM Do YYYY h:mm:ss a') + '</span>'
             if (event.details) {
-                details = JSON.parse(event.details)
+                let details = JSON.parse(event.details)
                 if (event.message == "Clicked Link" || event.message == "Submitted Data") {
-                    deviceView = renderDevice(details)
+                    let deviceView = renderDevice(details)
                     if (deviceView) {
                         results += deviceView
                     }
@@ -520,11 +520,11 @@ let renderPieChart = function (chartopts) {
             type: 'pie',
             events: {
                 load: function () {
-                    let chart = this,
-                        rend = chart.renderer,
-                        pie = chart.series[0],
-                        left = chart.plotLeft + pie.center[0],
-                        top = chart.plotTop + pie.center[1];
+                    let currentChart = this,
+                        rend = currentChart.renderer,
+                        pie = currentChart.series[0],
+                        left = currentChart.plotLeft + pie.center[0],
+                        top = currentChart.plotTop + pie.center[1];
                     this.innerText = rend.text(chartopts['data'][0].count, left, top).
                     attr({
                         'text-anchor': 'middle',
@@ -584,7 +584,7 @@ let updateMap = function (results) {
         if (result.latitude == 0 && result.longitude == 0) {
             return true;
         }
-        newIP = true
+        let newIP = true
         $.each(bubbles, function (i, bubble) {
             if (bubble.ip == result.ip) {
                 bubbles[i].radius += 1
@@ -689,7 +689,7 @@ function poll() {
             })
 
             /* Update the datatable */
-            resultsTable = $("#resultsTable").DataTable()
+            let resultsTable = $("#resultsTable").DataTable()
             resultsTable.rows().every(function (i, tableLoop, rowLoop) {
                 let row = this.row(i)
                 let rowData = row.data()
@@ -719,7 +719,7 @@ function poll() {
 }
 
 function load() {
-    campaign.id = globalThis.location.pathname.split('/').slice(-1)[0]
+    campaign.id = globalThis.location.pathname.split('/').at(-1)
     let use_map = JSON.parse(localStorage.getItem('gophish.use_map'))
     api.campaignId.results(campaign.id)
         .success(function (c) {
@@ -738,7 +738,7 @@ function load() {
                 // Setup viewing the details of a result
                 $("#resultsTable").on("click", ".timeline-event-details", function () {
                     // Show the parameters
-                    payloadResults = $(this).parent().find(".timeline-event-results")
+                    let payloadResults = $(this).parent().find(".timeline-event-results")
                     if (payloadResults.is(":visible")) {
                         $(this).find("i").removeClass("fa-caret-down")
                         $(this).find("i").addClass("fa-caret-right")
@@ -868,7 +868,7 @@ function load() {
                         name: '',
                         y: 100 - Math.floor((count / campaign.results.length) * 100)
                     })
-                    let chart = renderPieChart({
+                    renderPieChart({
                         elemId: statusMapping[status] + '_chart',
                         title: status,
                         name: status,
@@ -932,7 +932,7 @@ function report_mail(rid, cid) {
     }).then(function (result) {
         if (result.value){
             api.campaignId.get(cid).success((function(c) {
-                report_url = new URL(c.url)
+                let report_url = new URL(c.url)
                 report_url.pathname = '/report'
                 report_url.search = "?rid=" + rid
                 $.ajax({

@@ -138,7 +138,7 @@ let downloadCSVTemplate = function () {
         dlLink.setAttribute('download', filename)
         document.body.appendChild(dlLink)
         dlLink.click();
-        document.body.removeChild(dlLink)
+        dlLink.remove()
     }
 }
 
