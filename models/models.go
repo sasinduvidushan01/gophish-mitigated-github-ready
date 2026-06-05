@@ -107,8 +107,7 @@ func createTemporaryPassword(u *User) error {
 		// inconvenience, but it should be ok for now.
 		temporaryPassword = auth.GenerateSecureKey(auth.MinPasswordLength)
 	}
-	hash, err := auth.GeneratePasswordHash(temporaryPassword)
-	if err != nil {
+	hash, if err := auth.GeneratePasswordHash(temporaryPassword); err != nil {
 		return err
 	}
 	u.Hash = hash
@@ -140,8 +139,7 @@ func Setup(c *config.Config) error {
 		Driver:        chooseDBDriver(conf.DBName, conf.DBPath),
 	}
 	// Get the latest possible migration
-	latest, err := goose.GetMostRecentDBVersion(migrateConf.MigrationsDir)
-	if err != nil {
+	latest, if err := goose.GetMostRecentDBVersion(migrateConf.MigrationsDir); err != nil {
 		log.Error(err)
 		return err
 	}
@@ -151,8 +149,7 @@ func Setup(c *config.Config) error {
 		switch conf.DBName {
 		case "mysql":
 			rootCertPool := x509.NewCertPool()
-			pem, err := ioutil.ReadFile(conf.DBSSLCaPath)
-			if err != nil {
+			pem, if err := ioutil.ReadFile(conf.DBSSLCaPath); err != nil {
 				log.Error(err)
 				return err
 			}
@@ -202,8 +199,7 @@ func Setup(c *config.Config) error {
 	var userCount int64
 	var adminUser User
 	db.Model(&User{}).Count(&userCount)
-	adminRole, err := GetRoleBySlug(RoleAdmin)
-	if err != nil {
+	adminRole, if err := GetRoleBySlug(RoleAdmin); err != nil {
 		log.Error(err)
 		return err
 	}

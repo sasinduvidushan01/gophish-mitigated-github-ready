@@ -81,7 +81,7 @@ func GetTemplates(uid int64) ([]Template, error) {
 }
 
 // GetTemplate returns the template, if it exists, specified by the given id and user_id.
-func GetTemplate(id int64, uid int64) (Template, error) {
+func GetTemplate(id, uid int64) (Template, error) {
 	t := Template{}
 	err := db.Where("user_id=? and id=?", uid, id).Find(&t).Error
 	if err != nil {
@@ -181,7 +181,7 @@ func PutTemplate(t *Template) error {
 
 // DeleteTemplate deletes an existing template in the database.
 // An error is returned if a template with the given user id and template id is not found.
-func DeleteTemplate(id int64, uid int64) error {
+func DeleteTemplate(id, uid int64) error {
 	// Delete attachments
 	err := db.Where(templateIdQuery, id).Delete(&Attachment{}).Error
 	if err != nil {

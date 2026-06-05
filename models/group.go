@@ -146,7 +146,7 @@ func GetGroupSummaries(uid int64) (GroupSummaries, error) {
 }
 
 // GetGroup returns the group, if it exists, specified by the given id and user_id.
-func GetGroup(id int64, uid int64) (Group, error) {
+func GetGroup(id, uid int64) (Group, error) {
 	g := Group{}
 	err := db.Where("user_id=? and id=?", uid, id).Find(&g).Error
 	if err != nil {
@@ -161,7 +161,7 @@ func GetGroup(id int64, uid int64) (Group, error) {
 }
 
 // GetGroupSummary returns the summary for the requested group
-func GetGroupSummary(id int64, uid int64) (GroupSummary, error) {
+func GetGroupSummary(id, uid int64) (GroupSummary, error) {
 	g := GroupSummary{}
 	query := db.Table("groups").Where("user_id=? and id=?", uid, id)
 	err := query.Select("id, name, modified_date").Scan(&g).Error

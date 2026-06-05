@@ -71,7 +71,7 @@ func CheckPasswordPolicy(password string) error {
 
 // ValidatePassword validates that the provided password matches the provided
 // bcrypt hash.
-func ValidatePassword(password string, hash string) error {
+func ValidatePassword(password, hash string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 }
 

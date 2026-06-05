@@ -349,7 +349,7 @@ func GetCampaignSummaries(uid int64) (CampaignSummaries, error) {
 }
 
 // GetCampaignSummary gets the summary object for a campaign specified by the campaign ID
-func GetCampaignSummary(id int64, uid int64) (CampaignSummary, error) {
+func GetCampaignSummary(id, uid int64) (CampaignSummary, error) {
 	cs := CampaignSummary{}
 	query := db.Table("campaigns").Where("user_id = ? AND id = ?", uid, id)
 	query = query.Select("id, name, created_date, launch_date, send_by_date, completed_date, status")
@@ -374,7 +374,7 @@ func GetCampaignSummary(id int64, uid int64) (CampaignSummary, error) {
 // This should only ever be used if you specifically want this lightweight
 // context, since it returns a non-standard campaign object.
 // ref: #1726
-func GetCampaignMailContext(id int64, uid int64) (Campaign, error) {
+func GetCampaignMailContext(id, uid int64) (Campaign, error) {
 	c := Campaign{}
 	err := db.Where("id = ?", id).Where(userIdQuery, uid).Find(&c).Error
 	if err != nil {
@@ -400,7 +400,7 @@ func GetCampaignMailContext(id int64, uid int64) (Campaign, error) {
 }
 
 // GetCampaign returns the campaign, if it exists, specified by the given id and user_id.
-func GetCampaign(id int64, uid int64) (Campaign, error) {
+func GetCampaign(id, uid int64) (Campaign, error) {
 	c := Campaign{}
 	err := db.Where("id = ?", id).Where(userIdQuery, uid).Find(&c).Error
 	if err != nil {
@@ -412,7 +412,7 @@ func GetCampaign(id int64, uid int64) (Campaign, error) {
 }
 
 // GetCampaignResults returns just the campaign results for the given campaign
-func GetCampaignResults(id int64, uid int64) (CampaignResults, error) {
+func GetCampaignResults(id, uid int64) (CampaignResults, error) {
 	cr := CampaignResults{}
 	err := db.Table("campaigns").Where("id=? and user_id=?", id, uid).Find(&cr).Error
 	if err != nil {
@@ -645,7 +645,7 @@ func DeleteCampaign(id int64) error {
 
 // CompleteCampaign effectively "ends" a campaign.
 // Any future emails clicked will return a simple "404" page.
-func CompleteCampaign(id int64, uid int64) error {
+func CompleteCampaign(id, uid int64) error {
 	log.WithFields(logrus.Fields{
 		"campaign_id": id,
 	}).Info("Marking campaign as complete")

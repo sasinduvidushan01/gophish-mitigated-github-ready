@@ -100,7 +100,7 @@ func reportEmail404(t *testing.T, ctx *testContext, rid string) {
 	}
 }
 
-func clickLink(t *testing.T, ctx *testContext, rid string, expectedHTML string) {
+func clickLink(t *testing.T, ctx *testContext, rid, expectedHTML string) {
 	resp, err := http.Get(fmt.Sprintf("%s/?%s=%s", ctx.phishServer.URL, models.RecipientParameter, rid))
 	if err != nil {
 		t.Fatalf("error requesting / endpoint: %v", err)

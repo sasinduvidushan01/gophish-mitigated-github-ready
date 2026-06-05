@@ -499,7 +499,7 @@ func getTemplate(w http.ResponseWriter, tmpl string) *template.Template {
 }
 
 // Flash handles the rendering flash messages
-func Flash(w http.ResponseWriter, r *http.Request, t string, m string) {
+func Flash(w http.ResponseWriter, r *http.Request, t, m string) {
 	session := ctx.Get(r, "session").(*sessions.Session)
 	session.AddFlash(models.Flash{
 		Type:    t,

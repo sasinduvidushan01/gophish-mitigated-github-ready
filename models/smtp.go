@@ -150,7 +150,7 @@ func GetSMTPs(uid int64) ([]SMTP, error) {
 }
 
 // GetSMTP returns the SMTP, if it exists, specified by the given id and user_id.
-func GetSMTP(id int64, uid int64) (SMTP, error) {
+func GetSMTP(id, uid int64) (SMTP, error) {
 	s := SMTP{}
 	err := db.Where("user_id=? and id=?", uid, id).Find(&s).Error
 	if err != nil {
@@ -236,7 +236,7 @@ func PutSMTP(s *SMTP) error {
 
 // DeleteSMTP deletes an existing SMTP in the database.
 // An error is returned if a SMTP with the given user id and SMTP id is not found.
-func DeleteSMTP(id int64, uid int64) error {
+func DeleteSMTP(id, uid int64) error {
 	// Delete all custom headers
 	err := db.Where(smtpIdQuery, id).Delete(&Header{}).Error
 	if err != nil {
