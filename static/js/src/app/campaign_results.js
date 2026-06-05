@@ -270,7 +270,7 @@ function replay(event_idx) {
                 if (value) {
                     resolve();
                 } else {
-                    reject('Invalid URL.');
+                    reject(new Error('Invalid URL.'));
                 }
             });
         }
@@ -281,7 +281,6 @@ function replay(event_idx) {
         }
     })
     return
-    submitForm()
 
     function submitForm() {
         form.attr({
