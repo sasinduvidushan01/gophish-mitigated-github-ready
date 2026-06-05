@@ -299,8 +299,8 @@ func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
 	if !strings.HasPrefix(targetPath, "/") || strings.HasPrefix(targetPath, "//") {
 		targetPath = "/"
 	}
-	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
 	// codeql[go/unvalidated-url-redirection] False Positive: Validated by sameOriginRedirectPath
+	// nosemgrep: go.lang.security.injection.open-redirect.open-redirect
 	http.Redirect(w, r, targetPath, http.StatusFound)
 }
 
