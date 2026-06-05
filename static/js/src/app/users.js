@@ -85,7 +85,7 @@ const edit = (id) => {
 }
 
 const deleteUser = (id) => {
-    var user = users.find(x => x.id == id)
+    let user = users.find(x => x.id == id)
     if (!user) {
         return
     }
@@ -136,7 +136,7 @@ const deleteUser = (id) => {
 }
 
 const impersonate = (id) => {
-    var user = users.find(x => x.id == id)
+    let user = users.find(x => x.id == id)
     if (!user) {
         return
     }

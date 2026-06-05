@@ -1,5 +1,7 @@
 package models
 
+const groupIdQuery = "group_id=?"
+
 import (
 	"errors"
 	"fmt"
@@ -133,7 +135,7 @@ func GetGroupSummaries(uid int64) (GroupSummaries, error) {
 		return gs, err
 	}
 	for i := range gs.Groups {
-		query = db.Table("group_targets").Where("group_id=?", gs.Groups[i].Id)
+		query = db.Table("group_targets").Where(groupIdQuery, gs.Groups[i].Id)
 		err = query.Count(&gs.Groups[i].NumTargets).Error
 		if err != nil {
 			return gs, err
@@ -167,7 +169,7 @@ func GetGroupSummary(id int64, uid int64) (GroupSummary, error) {
 		log.Error(err)
 		return g, err
 	}
-	query = db.Table("group_targets").Where("group_id=?", id)
+	query = db.Table("group_targets").Where(groupIdQuery, id)
 	err = query.Count(&g.NumTargets).Error
 	if err != nil {
 		return g, err
@@ -298,7 +300,7 @@ func PutGroup(g *Group) error {
 // DeleteGroup deletes a given group by group ID and user ID
 func DeleteGroup(g *Group) error {
 	// Delete all the group_targets entries for this group
-	err := db.Where("group_id=?", g.Id).Delete(&GroupTarget{}).Error
+	err := db.Where(groupIdQuery, g.Id).Delete(&GroupTarget{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

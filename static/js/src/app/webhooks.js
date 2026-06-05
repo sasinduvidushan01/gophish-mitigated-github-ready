@@ -105,7 +105,7 @@ const editWebhook = (id) => {
 };
 
 const deleteWebhook = (id) => {
-    var wh = webhooks.find(x => x.id == id);
+    let wh = webhooks.find(x => x.id == id);
     if (!wh) {
         return;
     }
@@ -157,7 +157,7 @@ const pingUrl = (btn, whId) => {
         })
         .error(function(data) {
             btn.disabled = false;
-            var wh = webhooks.find(x => x.id == whId);
+            let wh = webhooks.find(x => x.id == whId);
             if (!wh) {
                 return
             }

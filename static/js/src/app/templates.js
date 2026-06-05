@@ -1,5 +1,5 @@
-var templates = []
-var icons = {
+let templates = []
+let icons = {
     "application/vnd.ms-excel": "fa-file-excel-o",
     "text/plain": "fa-file-text-o",
     "image/gif": "fa-file-image-o",
@@ -15,7 +15,7 @@ var icons = {
 
 // Save attempts to POST to /templates/
 function save(idx) {
-    var template = {
+    let template = {
         attachments: []
     }
     template.name = $("#name").val()
@@ -79,7 +79,7 @@ function dismiss() {
     $("#modal").modal('hide')
 }
 
-var deleteTemplate = function (idx) {
+let deleteTemplate = function (idx) {
     Swal.fire({
         title: "Are you sure?",
         text: "This will delete the template. This can't be undone!",
@@ -140,10 +140,10 @@ function attach(files) {
         }]
     });
     $.each(files, function (i, file) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         /* Make this a datatable */
         reader.onload = function (e) {
-            var icon = icons[file.type] || "fa-file-o"
+            let icon = icons[file.type] || "fa-file-o"
             // Add the record to the modal
             attachmentsTable.row.add([
                 '<i class="fa ' + icon + '"></i>',
@@ -183,7 +183,7 @@ function edit(idx) {
             targets: [3, 4]
         }]
     });
-    var template = {
+    let template = {
         attachments: []
     }
     if (idx != -1) {
@@ -196,7 +196,7 @@ function edit(idx) {
         $("#text_editor").val(template.text)
         attachmentRows = []
         $.each(template.attachments, function (i, file) {
-            var icon = icons[file.type] || "fa-file-o"
+            let icon = icons[file.type] || "fa-file-o"
             // Add the record to the modal
             attachmentRows.push([
                 '<i class="fa ' + icon + '"></i>',
@@ -246,7 +246,7 @@ function copy(idx) {
             targets: [3, 4]
         }]
     });
-    var template = {
+    let template = {
         attachments: []
     }
     template = templates[idx]
@@ -256,7 +256,7 @@ function copy(idx) {
     $("#html_editor").val(template.html)
     $("#text_editor").val(template.text)
     $.each(template.attachments, function (i, file) {
-        var icon = icons[file.type] || "fa-file-o"
+        let icon = icons[file.type] || "fa-file-o"
         // Add the record to the modal
         attachmentsTable.row.add([
             '<i class="fa ' + icon + '"></i>',
@@ -403,8 +403,8 @@ $(document).ready(function () {
     })
     CKEDITOR.on('dialogDefinition', function (ev) {
         // Take the dialog name and its definition from the event data.
-        var dialogName = ev.data.name;
-        var dialogDefinition = ev.data.definition;
+        let dialogName = ev.data.name;
+        let dialogDefinition = ev.data.definition;
 
         // Check if the definition is from the dialog window you are interested in (the "Link" dialog window).
         if (dialogName == 'link') {
@@ -412,7 +412,7 @@ $(document).ready(function () {
             dialogDefinition.minHeight = 100
 
             // Remove the linkType field
-            var infoTab = dialogDefinition.getContents('info');
+            let infoTab = dialogDefinition.getContents('info');
             infoTab.get('linkType').hidden = true;
         }
     });

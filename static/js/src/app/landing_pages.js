@@ -3,12 +3,12 @@
 	Handles the creation, editing, and deletion of landing pages
 	Author: Jordan Wright <github.com/jordan-wright>
 */
-var pages = []
+let pages = []
 
 
 // Save attempts to POST to /templates/
 function save(idx) {
-    var page = {}
+    let page = {}
     page.name = $("#name").val()
     editor = CKEDITOR.instances["html_editor"]
     page.html = editor.getData()
@@ -49,7 +49,7 @@ function dismiss() {
     $("#modal").modal('hide')
 }
 
-var deletePage = function (idx) {
+let deletePage = function (idx) {
     Swal.fire({
         title: "Are you sure?",
         text: "This will delete the landing page. This can't be undone!",
@@ -111,7 +111,7 @@ function edit(idx) {
     })
     $("#html_editor").ckeditor()
     setupAutocomplete(CKEDITOR.instances["html_editor"])
-    var page = {}
+    let page = {}
     if (idx != -1) {
         $("#modalLabel").text("Edit Landing Page")
         page = pages[idx]
@@ -134,7 +134,7 @@ function copy(idx) {
         save(-1)
     })
     $("#html_editor").ckeditor()
-    var page = pages[idx]
+    let page = pages[idx]
     $("#name").val("Copy of " + page.name)
     $("#html_editor").val(page.html)
 }
@@ -240,8 +240,8 @@ $(document).ready(function () {
     })
     CKEDITOR.on('dialogDefinition', function (ev) {
         // Take the dialog name and its definition from the event data.
-        var dialogName = ev.data.name;
-        var dialogDefinition = ev.data.definition;
+        let dialogName = ev.data.name;
+        let dialogDefinition = ev.data.definition;
 
         // Check if the definition is from the dialog window you are interested in (the "Link" dialog window).
         if (dialogName == 'link') {
@@ -249,7 +249,7 @@ $(document).ready(function () {
             dialogDefinition.minHeight = 100
 
             // Remove the linkType field
-            var infoTab = dialogDefinition.getContents('info');
+            let infoTab = dialogDefinition.getContents('info');
             infoTab.get('linkType').hidden = true;
         }
     });

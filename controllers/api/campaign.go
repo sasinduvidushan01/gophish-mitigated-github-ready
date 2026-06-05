@@ -1,5 +1,7 @@
 package api
 
+const campaignNotFound = "Campaign not found"
+
 import (
 	"encoding/json"
 	"net/http"
@@ -67,7 +69,7 @@ func (as *Server) Campaign(w http.ResponseWriter, r *http.Request) {
 	c, err := models.GetCampaign(id, ctx.Get(r, "user_id").(int64))
 	if err != nil {
 		log.Error(err)
-		JSONResponse(w, models.Response{Success: false, Message: "Campaign not found"}, http.StatusNotFound)
+		JSONResponse(w, models.Response{Success: false, Message: campaignNotFound}, http.StatusNotFound)
 		return
 	}
 	switch {
@@ -91,7 +93,7 @@ func (as *Server) CampaignResults(w http.ResponseWriter, r *http.Request) {
 	cr, err := models.GetCampaignResults(id, ctx.Get(r, "user_id").(int64))
 	if err != nil {
 		log.Error(err)
-		JSONResponse(w, models.Response{Success: false, Message: "Campaign not found"}, http.StatusNotFound)
+		JSONResponse(w, models.Response{Success: false, Message: campaignNotFound}, http.StatusNotFound)
 		return
 	}
 	if r.Method == "GET" {
@@ -109,7 +111,7 @@ func (as *Server) CampaignSummary(w http.ResponseWriter, r *http.Request) {
 		cs, err := models.GetCampaignSummary(id, ctx.Get(r, "user_id").(int64))
 		if err != nil {
 			if err == gorm.ErrRecordNotFound {
-				JSONResponse(w, models.Response{Success: false, Message: "Campaign not found"}, http.StatusNotFound)
+				JSONResponse(w, models.Response{Success: false, Message: campaignNotFound}, http.StatusNotFound)
 			} else {
 				JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusInternalServerError)
 			}

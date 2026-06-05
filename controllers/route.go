@@ -1,5 +1,7 @@
 package controllers
 
+const flashesTemplate = "templates/flashes.html"
+
 import (
 	"compress/gzip"
 	"context"
@@ -329,7 +331,7 @@ func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request
 	params.Flashes = session.Flashes()
 	session.Save(r, w)
 	templates := template.New("template")
-	_, err := templates.ParseFiles("templates/login.html", "templates/flashes.html")
+	_, err := templates.ParseFiles("templates/login.html", flashesTemplate)
 	if err != nil {
 		log.Error(err)
 	}
@@ -378,7 +380,7 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		params.Flashes = session.Flashes()
 		session.Save(r, w)
 		templates := template.New("template")
-		_, err := templates.ParseFiles("templates/login.html", "templates/flashes.html")
+		_, err := templates.ParseFiles("templates/login.html", flashesTemplate)
 		if err != nil {
 			log.Error(err)
 		}
@@ -489,7 +491,7 @@ func (as *AdminServer) ResetPassword(w http.ResponseWriter, r *http.Request) {
 // TODO: Make this execute the template, too
 func getTemplate(w http.ResponseWriter, tmpl string) *template.Template {
 	templates := template.New("template")
-	_, err := templates.ParseFiles("templates/base.html", "templates/nav.html", "templates/"+tmpl+".html", "templates/flashes.html")
+	_, err := templates.ParseFiles("templates/base.html", "templates/nav.html", "templates/"+tmpl+".html", flashesTemplate)
 	if err != nil {
 		log.Error(err)
 	}

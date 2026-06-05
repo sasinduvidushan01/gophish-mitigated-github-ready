@@ -1,5 +1,10 @@
 package models
 
+const deletedStatus = "[Deleted]"
+const statusQuery = "status=?"
+const userIdQuery = "user_id = ?"
+const campaignIdQuery = "campaign_id=?"
+
 import (
 	"errors"
 	"net/url"
@@ -196,7 +201,7 @@ func (c *Campaign) getDetails() error {
 		if err != gorm.ErrRecordNotFound {
 			return err
 		}
-		c.Template = Template{Name: "[Deleted]"}
+		c.Template = Template{Name: deletedStatus}
 		log.Warnf("%s: template not found for campaign", err)
 	}
 	err = db.Where("template_id=?", c.Template.Id).Find(&c.Template.Attachments).Error
@@ -209,7 +214,7 @@ func (c *Campaign) getDetails() error {
 		if err != gorm.ErrRecordNotFound {
 			return err
 		}
-		c.Page = Page{Name: "[Deleted]"}
+		c.Page = Page{Name: deletedStatus}
 		log.Warnf("%s: page not found for campaign", err)
 	}
 	err = db.Table("smtp").Where("id=?", c.SMTPId).Find(&c.SMTP).Error
@@ -218,7 +223,7 @@ func (c *Campaign) getDetails() error {
 		if err != gorm.ErrRecordNotFound {
 			return err
 		}
-		c.SMTP = SMTP{Name: "[Deleted]"}
+		c.SMTP = SMTP{Name: deletedStatus}
 		log.Warnf("%s: sending profile not found for campaign", err)
 	}
 	err = db.Where("smtp_id=?", c.SMTP.Id).Find(&c.SMTP.Headers).Error
@@ -271,11 +276,11 @@ func getCampaignStats(cid int64) (CampaignStats, error) {
 	if err != nil {
 		return s, err
 	}
-	query.Where("status=?", EventDataSubmit).Count(&s.SubmittedData)
+	query.Where(statusQuery, EventDataSubmit).Count(&s.SubmittedData)
 	if err != nil {
 		return s, err
 	}
-	query.Where("status=?", EventClicked).Count(&s.ClickedLink)
+	query.Where(statusQuery, EventClicked).Count(&s.ClickedLink)
 	if err != nil {
 		return s, err
 	}
@@ -285,19 +290,19 @@ func getCampaignStats(cid int64) (CampaignStats, error) {
 	}
 	// Every submitted data event implies they clicked the link
 	s.ClickedLink += s.SubmittedData
-	err = query.Where("status=?", EventOpened).Count(&s.OpenedEmail).Error
+	err = query.Where(statusQuery, EventOpened).Count(&s.OpenedEmail).Error
 	if err != nil {
 		return s, err
 	}
 	// Every clicked link event implies they opened the email
 	s.OpenedEmail += s.ClickedLink
-	err = query.Where("status=?", EventSent).Count(&s.EmailsSent).Error
+	err = query.Where(statusQuery, EventSent).Count(&s.EmailsSent).Error
 	if err != nil {
 		return s, err
 	}
 	// Every opened email event implies the email was sent
 	s.EmailsSent += s.OpenedEmail
-	err = query.Where("status=?", Error).Count(&s.Error).Error
+	err = query.Where(statusQuery, Error).Count(&s.Error).Error
 	return s, err
 }
 
@@ -323,7 +328,7 @@ func GetCampaignSummaries(uid int64) (CampaignSummaries, error) {
 	overview := CampaignSummaries{}
 	cs := []CampaignSummary{}
 	// Get the basic campaign information
-	query := db.Table("campaigns").Where("user_id = ?", uid)
+	query := db.Table("campaigns").Where(userIdQuery, uid)
 	query = query.Select("id, name, created_date, launch_date, send_by_date, completed_date, status")
 	err := query.Scan(&cs).Error
 	if err != nil {
@@ -371,7 +376,7 @@ func GetCampaignSummary(id int64, uid int64) (CampaignSummary, error) {
 // ref: #1726
 func GetCampaignMailContext(id int64, uid int64) (Campaign, error) {
 	c := Campaign{}
-	err := db.Where("id = ?", id).Where("user_id = ?", uid).Find(&c).Error
+	err := db.Where("id = ?", id).Where(userIdQuery, uid).Find(&c).Error
 	if err != nil {
 		return c, err
 	}
@@ -397,7 +402,7 @@ func GetCampaignMailContext(id int64, uid int64) (Campaign, error) {
 // GetCampaign returns the campaign, if it exists, specified by the given id and user_id.
 func GetCampaign(id int64, uid int64) (Campaign, error) {
 	c := Campaign{}
-	err := db.Where("id = ?", id).Where("user_id = ?", uid).Find(&c).Error
+	err := db.Where("id = ?", id).Where(userIdQuery, uid).Find(&c).Error
 	if err != nil {
 		log.Errorf("%s: campaign not found", err)
 		return c, err
@@ -422,7 +427,7 @@ func GetCampaignResults(id int64, uid int64) (CampaignResults, error) {
 		log.Errorf("%s: results not found for campaign", err)
 		return cr, err
 	}
-	err = db.Table("events").Where("campaign_id=?", cr.Id).Find(&cr.Events).Error
+	err = db.Table("events").Where(campaignIdQuery, cr.Id).Find(&cr.Events).Error
 	if err != nil {
 		log.Errorf("%s: events not found for campaign", err)
 		return cr, err
@@ -615,17 +620,17 @@ func DeleteCampaign(id int64) error {
 		"campaign_id": id,
 	}).Info("Deleting campaign")
 	// Delete all the campaign results
-	err := db.Where("campaign_id=?", id).Delete(&Result{}).Error
+	err := db.Where(campaignIdQuery, id).Delete(&Result{}).Error
 	if err != nil {
 		log.Error(err)
 		return err
 	}
-	err = db.Where("campaign_id=?", id).Delete(&Event{}).Error
+	err = db.Where(campaignIdQuery, id).Delete(&Event{}).Error
 	if err != nil {
 		log.Error(err)
 		return err
 	}
-	err = db.Where("campaign_id=?", id).Delete(&MailLog{}).Error
+	err = db.Where(campaignIdQuery, id).Delete(&MailLog{}).Error
 	if err != nil {
 		log.Error(err)
 		return err
@@ -649,7 +654,7 @@ func CompleteCampaign(id int64, uid int64) error {
 		return err
 	}
 	// Delete any maillogs still set to be sent out, preventing future emails
-	err = db.Where("campaign_id=?", id).Delete(&MailLog{}).Error
+	err = db.Where(campaignIdQuery, id).Delete(&MailLog{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

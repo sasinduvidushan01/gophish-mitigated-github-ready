@@ -1,6 +1,6 @@
-var campaigns = []
+let campaigns = []
 // statuses is a helper map to point result statuses to ui classes
-var statuses = {
+let statuses = {
     "Email Sent": {
         color: "#1abc9c",
         label: "label-success",
@@ -82,7 +82,7 @@ var statuses = {
     }
 }
 
-var statsMapping = {
+let statsMapping = {
     "sent": "Email Sent",
     "opened": "Email Opened",
     "email_reported": "Email Reported",
@@ -107,7 +107,7 @@ function renderPieChart(chartopts) {
             type: 'pie',
             events: {
                 load: function () {
-                    var chart = this,
+                    let chart = this,
                         rend = chart.renderer,
                         pie = chart.series[0],
                         left = chart.plotLeft + pie.center[0],
@@ -158,9 +158,9 @@ function renderPieChart(chartopts) {
 }
 
 function generateStatsPieCharts(campaigns) {
-    var stats_data = []
-    var stats_series_data = {}
-    var total = 0
+    let stats_data = []
+    let stats_series_data = {}
+    let total = 0
 
     $.each(campaigns, function (i, campaign) {
         $.each(campaign.stats, function (status, count) {
@@ -191,7 +191,7 @@ function generateStatsPieCharts(campaigns) {
             name: '',
             y: 100 - Math.floor((count / total) * 100)
         })
-        var stats_chart = renderPieChart({
+        let stats_chart = renderPieChart({
             elemId: status + '_chart',
             title: status_label,
             name: status,
@@ -204,9 +204,9 @@ function generateStatsPieCharts(campaigns) {
 }
 
 function generateTimelineChart(campaigns) {
-    var overview_data = []
+    let overview_data = []
     $.each(campaigns, function (i, campaign) {
-        var campaign_date = moment.utc(campaign.created_date).local()
+        let campaign_date = moment.utc(campaign.created_date).local()
         // Add it to the chart data
         campaign.y = 0
         // Clicked events also contain our data submitted events
@@ -328,16 +328,16 @@ $(document).ready(function () {
                 });
                 campaignRows = []
                 $.each(campaigns, function (i, campaign) {
-                    var campaign_date = moment(campaign.created_date).format('MMMM Do YYYY, h:mm:ss a')
-                    var label = statuses[campaign.status].label || "label-default";
+                    let campaign_date = moment(campaign.created_date).format('MMMM Do YYYY, h:mm:ss a')
+                    let label = statuses[campaign.status].label || "label-default";
                     //section for tooltips on the status of a campaign to show some quick stats
-                    var launchDate;
+                    let launchDate;
                     if (moment(campaign.launch_date).isAfter(moment())) {
                         launchDate = "Scheduled to start: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
+                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
                     } else {
                         launchDate = "Launch Date: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
+                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
                     }
                     // Add it to the list
                     campaignRows.push([

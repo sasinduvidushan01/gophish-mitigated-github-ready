@@ -1,8 +1,8 @@
-var map = null
-var doPoll = true;
+let map = null
+let doPoll = true;
 
 // statuses is a helper map to point result statuses to ui classes
-var statuses = {
+let statuses = {
     "Email Sent": {
         color: "#1abc9c",
         label: "label-success",
@@ -97,7 +97,7 @@ var statuses = {
     }
 }
 
-var statusMapping = {
+let statusMapping = {
     "Email Sent": "sent",
     "Email Opened": "opened",
     "Clicked Link": "clicked",
@@ -107,15 +107,15 @@ var statusMapping = {
 
 // This is an underwhelming attempt at an enum
 // until I have time to refactor this appropriately.
-var progressListing = [
+let progressListing = [
     "Email Sent",
     "Email Opened",
     "Clicked Link",
     "Submitted Data"
 ]
 
-var campaign = {}
-var bubbles = []
+let campaign = {}
+let bubbles = []
 
 function dismiss() {
     $("#modal\\.flashes").empty()
@@ -202,8 +202,8 @@ function completeCampaign() {
 // Exports campaign results as a CSV file
 function exportAsCSV(scope) {
     let exportHTML = $("#exportButton").html()
-    var csvScope = null
-    var filename = campaign.name + ' - ' + capitalize(scope) + '.csv'
+    let csvScope = null
+    let filename = campaign.name + ' - ' + capitalize(scope) + '.csv'
     switch (scope) {
         case "results":
             csvScope = campaign.results
@@ -216,17 +216,17 @@ function exportAsCSV(scope) {
         return
     }
     $("#exportButton").html('<i class="fa fa-spinner fa-spin"></i>')
-    var csvString = Papa.unparse(csvScope, {
+    let csvString = Papa.unparse(csvScope, {
         'escapeFormulae': true
     })
-    var csvData = new Blob([csvString], {
+    let csvData = new Blob([csvString], {
         type: 'text/csv;charset=utf-8;'
     });
     if (navigator.msSaveBlob) {
         navigator.msSaveBlob(csvData, filename);
     } else {
-        var csvURL = window.URL.createObjectURL(csvData);
-        var dlLink = document.createElement('a');
+        let csvURL = window.URL.createObjectURL(csvData);
+        let dlLink = document.createElement('a');
         dlLink.href = csvURL;
         dlLink.setAttribute('download', filename)
         document.body.appendChild(dlLink)
@@ -298,24 +298,24 @@ function replay(event_idx) {
  *  timeline event
  * 
  */
-var renderDevice = function (event_details) {
-    var ua = UAParser(details.browser['user-agent'])
-    var detailsString = '<div class="timeline-device-details">'
+let renderDevice = function (event_details) {
+    let ua = UAParser(details.browser['user-agent'])
+    let detailsString = '<div class="timeline-device-details">'
 
-    var deviceIcon = 'laptop'
+    let deviceIcon = 'laptop'
     if (ua.device.type) {
         if (ua.device.type == 'tablet' || ua.device.type == 'mobile') {
             deviceIcon = ua.device.type
         }
     }
 
-    var deviceVendor = ''
+    let deviceVendor = ''
     if (ua.device.vendor) {
         deviceVendor = ua.device.vendor.toLowerCase()
         if (deviceVendor == 'microsoft') deviceVendor = 'windows'
     }
 
-    var deviceName = 'Unknown'
+    let deviceName = 'Unknown'
     if (ua.os.name) {
         deviceName = ua.os.name
         if (deviceName == "Mac OS") {
@@ -332,16 +332,16 @@ var renderDevice = function (event_details) {
         deviceName = deviceName + ' (OS Version: ' + ua.os.version + ')'
     }
 
-    deviceString = '<div class="timeline-device-os"><span class="fa fa-stack">' +
+    let deviceString = '<div class="timeline-device-os"><span class="fa fa-stack">' +
         '<i class="fa fa-' + escapeHtml(deviceIcon) + ' fa-stack-2x"></i>' +
         '<i class="fa fa-vendor-icon fa-' + escapeHtml(deviceVendor) + ' fa-stack-1x"></i>' +
         '</span> ' + escapeHtml(deviceName) + '</div>'
 
     detailsString += deviceString
 
-    var deviceBrowser = 'Unknown'
-    var browserIcon = 'info-circle'
-    var browserVersion = ''
+    let deviceBrowser = 'Unknown'
+    let browserIcon = 'info-circle'
+    let browserVersion = ''
 
     if (ua.browser && ua.browser.name) {
         deviceBrowser = ua.browser.name
@@ -354,7 +354,7 @@ var renderDevice = function (event_details) {
         browserVersion = '(Version: ' + ua.browser.version + ')'
     }
 
-    var browserString = '<div class="timeline-device-browser"><span class="fa fa-stack">' +
+    let browserString = '<div class="timeline-device-browser"><span class="fa fa-stack">' +
         '<i class="fa fa-' + escapeHtml(browserIcon) + ' fa-stack-1x"></i></span> ' +
         deviceBrowser + ' ' + browserVersion + '</div>'
 
@@ -441,7 +441,7 @@ function renderTimeline(data) {
     return results
 }
 
-var renderTimelineChart = function (chartopts) {
+let renderTimelineChart = function (chartopts) {
     return Highcharts.chart('timeline_chart', {
         chart: {
             zoomType: 'x',
@@ -514,13 +514,13 @@ var renderTimelineChart = function (chartopts) {
 }
 
 /* Renders a pie chart using the provided chartops */
-var renderPieChart = function (chartopts) {
+let renderPieChart = function (chartopts) {
     return Highcharts.chart(chartopts['elemId'], {
         chart: {
             type: 'pie',
             events: {
                 load: function () {
-                    var chart = this,
+                    let chart = this,
                         rend = chart.renderer,
                         pie = chart.series[0],
                         left = chart.plotLeft + pie.center[0],
@@ -574,7 +574,7 @@ var renderPieChart = function (chartopts) {
 
 @param {campaign.result[]} results - The campaign results to process
 */
-var updateMap = function (results) {
+let updateMap = function (results) {
     if (!map) {
         return
     }
@@ -611,11 +611,11 @@ var updateMap = function (results) {
  * @param {moment(datetime)} send_date 
  */
 function createStatusLabel(status, send_date) {
-    var label = statuses[status].label || "label-default";
-    var statusColumn = "<span class=\"label " + label + "\">" + status + "</span>"
+    let label = statuses[status].label || "label-default";
+    let statusColumn = "<span class=\"label " + label + "\">" + status + "</span>"
     // Add the tooltip if the email is scheduled to be sent
     if (status == "Scheduled" || status == "Retrying") {
-        var sendDateMessage = "Scheduled to send at " + send_date
+        let sendDateMessage = "Scheduled to send at " + send_date
         statusColumn = "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"" + sendDateMessage + "\">" + status + "</span>"
     }
     return statusColumn
@@ -634,9 +634,9 @@ function poll() {
         .success(function (c) {
             campaign = c
             /* Update the timeline */
-            var timeline_series_data = []
+            let timeline_series_data = []
             $.each(campaign.timeline, function (i, event) {
-                var event_date = moment.utc(event.time).local()
+                let event_date = moment.utc(event.time).local()
                 timeline_series_data.push({
                     email: event.email,
                     message: event.message,
@@ -647,12 +647,12 @@ function poll() {
                     }
                 })
             })
-            var timeline_chart = $("#timeline_chart").highcharts()
+            let timeline_chart = $("#timeline_chart").highcharts()
             timeline_chart.series[0].update({
                 data: timeline_series_data
             })
             /* Update the results donut chart */
-            var email_series_data = {}
+            let email_series_data = {}
             // Load the initial data
             Object.keys(statusMapping).forEach(function (k) {
                 email_series_data[k] = 0
@@ -663,13 +663,13 @@ function poll() {
                     email_series_data['Email Reported']++
                 }
                 // Backfill status values
-                var step = progressListing.indexOf(result.status)
-                for (var i = 0; i < step; i++) {
+                let step = progressListing.indexOf(result.status)
+                for (let i = 0; i < step; i++) {
                     email_series_data[progressListing[i]]++
                 }
             })
             $.each(email_series_data, function (status, count) {
-                var email_data = []
+                let email_data = []
                 if (!(status in statusMapping)) {
                     return true
                 }
@@ -682,7 +682,7 @@ function poll() {
                     name: '',
                     y: 100 - Math.floor((count / campaign.results.length) * 100)
                 })
-                var chart = $("#" + statusMapping[status] + "_chart").highcharts()
+                let chart = $("#" + statusMapping[status] + "_chart").highcharts()
                 chart.series[0].update({
                     data: email_data
                 })
@@ -691,9 +691,9 @@ function poll() {
             /* Update the datatable */
             resultsTable = $("#resultsTable").DataTable()
             resultsTable.rows().every(function (i, tableLoop, rowLoop) {
-                var row = this.row(i)
-                var rowData = row.data()
-                var rid = rowData[0]
+                let row = this.row(i)
+                let rowData = row.data()
+                let rid = rowData[0]
                 $.each(campaign.results, function (j, result) {
                     if (result.id == rid) {
                         rowData[8] = moment(result.send_date).format('MMMM Do YYYY, h:mm:ss a')
@@ -720,7 +720,7 @@ function poll() {
 
 function load() {
     campaign.id = window.location.pathname.split('/').slice(-1)[0]
-    var use_map = JSON.parse(localStorage.getItem('gophish.use_map'))
+    let use_map = JSON.parse(localStorage.getItem('gophish.use_map'))
     api.campaignId.results(campaign.id)
         .success(function (c) {
             campaign = c
@@ -787,8 +787,8 @@ function load() {
                     ]
                 });
                 resultsTable.clear();
-                var email_series_data = {}
-                var timeline_series_data = []
+                let email_series_data = {}
+                let timeline_series_data = []
                 Object.keys(statusMapping).forEach(function (k) {
                     email_series_data[k] = 0
                 });
@@ -809,8 +809,8 @@ function load() {
                         email_series_data['Email Reported']++
                     }
                     // Backfill status values
-                    var step = progressListing.indexOf(result.status)
-                    for (var i = 0; i < step; i++) {
+                    let step = progressListing.indexOf(result.status)
+                    for (let i = 0; i < step; i++) {
                         email_series_data[progressListing[i]]++
                     }
                 })
@@ -819,8 +819,8 @@ function load() {
                 $('[data-toggle="tooltip"]').tooltip()
                 // Setup the individual timelines
                 $('#resultsTable tbody').on('click', 'td.details-control', function () {
-                    var tr = $(this).closest('tr');
-                    var row = resultsTable.row(tr);
+                    let tr = $(this).closest('tr');
+                    let row = resultsTable.row(tr);
                     if (row.child.isShown()) {
                         // This row is already open - close it
                         row.child.hide();
@@ -840,7 +840,7 @@ function load() {
                     if (event.message == "Campaign Created") {
                         return true
                     }
-                    var event_date = moment.utc(event.time).local()
+                    let event_date = moment.utc(event.time).local()
                     timeline_series_data.push({
                         email: event.email,
                         message: event.message,
@@ -855,7 +855,7 @@ function load() {
                     data: timeline_series_data
                 })
                 $.each(email_series_data, function (status, count) {
-                    var email_data = []
+                    let email_data = []
                     if (!(status in statusMapping)) {
                         return true
                     }
@@ -868,7 +868,7 @@ function load() {
                         name: '',
                         y: 100 - Math.floor((count / campaign.results.length) * 100)
                     })
-                    var chart = renderPieChart({
+                    let chart = renderPieChart({
                         elemId: statusMapping[status] + '_chart',
                         title: status,
                         name: status,
@@ -904,7 +904,7 @@ function load() {
         })
 }
 
-var setRefresh
+let setRefresh
 
 function refresh() {
     if (!doPoll) {

@@ -1,5 +1,7 @@
 package models
 
+const templateIdQuery = "template_id=?"
+
 import (
 	"errors"
 	"net/mail"
@@ -66,7 +68,7 @@ func GetTemplates(uid int64) ([]Template, error) {
 	}
 	for i := range ts {
 		// Get Attachments
-		err = db.Where("template_id=?", ts[i].Id).Find(&ts[i].Attachments).Error
+		err = db.Where(templateIdQuery, ts[i].Id).Find(&ts[i].Attachments).Error
 		if err == nil && len(ts[i].Attachments) == 0 {
 			ts[i].Attachments = make([]Attachment, 0)
 		}
@@ -88,7 +90,7 @@ func GetTemplate(id int64, uid int64) (Template, error) {
 	}
 
 	// Get Attachments
-	err = db.Where("template_id=?", t.Id).Find(&t.Attachments).Error
+	err = db.Where(templateIdQuery, t.Id).Find(&t.Attachments).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 		return t, err
@@ -109,7 +111,7 @@ func GetTemplateByName(n string, uid int64) (Template, error) {
 	}
 
 	// Get Attachments
-	err = db.Where("template_id=?", t.Id).Find(&t.Attachments).Error
+	err = db.Where(templateIdQuery, t.Id).Find(&t.Attachments).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 		return t, err
@@ -151,7 +153,7 @@ func PutTemplate(t *Template) error {
 		return err
 	}
 	// Delete all attachments, and replace with new ones
-	err := db.Where("template_id=?", t.Id).Delete(&Attachment{}).Error
+	err := db.Where(templateIdQuery, t.Id).Delete(&Attachment{}).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 		return err
@@ -181,7 +183,7 @@ func PutTemplate(t *Template) error {
 // An error is returned if a template with the given user id and template id is not found.
 func DeleteTemplate(id int64, uid int64) error {
 	// Delete attachments
-	err := db.Where("template_id=?", id).Delete(&Attachment{}).Error
+	err := db.Where(templateIdQuery, id).Delete(&Attachment{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

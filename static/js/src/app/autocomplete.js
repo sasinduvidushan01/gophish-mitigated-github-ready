@@ -1,4 +1,4 @@
-var TEMPLATE_TAGS = [{
+let TEMPLATE_TAGS = [{
         id: 1,
         name: 'RId',
         description: 'The unique ID for the recipient.'
@@ -45,7 +45,7 @@ var TEMPLATE_TAGS = [{
     }
 ];
 
-var textTestCallback = function (range) {
+let textTestCallback = function (range) {
     if (!range.collapsed) {
         return null;
     }
@@ -53,8 +53,8 @@ var textTestCallback = function (range) {
     return CKEDITOR.plugins.textMatch.match(range, matchCallback);
 }
 
-var matchCallback = function (text, offset) {
-    var pattern = /\{{2}\.?([A-Za-z]|\})*$/,
+let matchCallback = function (text, offset) {
+    let pattern = /\{{2}\.?([A-Za-z]|\})*$/,
         match = text.slice(0, offset)
         .match(pattern);
 
@@ -73,9 +73,9 @@ var matchCallback = function (text, offset) {
  * @param {regex} matchInfo - The matched text object
  * @param {function} callback - The callback to execute with the matched data
  */
-var dataCallback = function (matchInfo, callback) {
-    var data = TEMPLATE_TAGS.filter(function (item) {
-        var itemName = '{{.' + item.name.toLowerCase() + '}}';
+let dataCallback = function (matchInfo, callback) {
+    let data = TEMPLATE_TAGS.filter(function (item) {
+        let itemName = '{{.' + item.name.toLowerCase() + '}}';
         return itemName.indexOf(matchInfo.query.toLowerCase()) == 0;
     });
 
@@ -88,15 +88,15 @@ var dataCallback = function (matchInfo, callback) {
  * 
  * Installs the autocomplete plugin to the CKEditor.
  */
-var setupAutocomplete = function (editor) {
+let setupAutocomplete = function (editor) {
     editor.on('instanceReady', function (evt) {
-        var itemTemplate = '<li data-id="{id}">' +
+        let itemTemplate = '<li data-id="{id}">' +
             '<div><strong class="item-title">{name}</strong></div>' +
             '<div><i>{description}</i></div>' +
             '</li>',
             outputTemplate = '[[.{name}]]';
 
-        var autocomplete = new CKEDITOR.plugins.autocomplete(evt.editor, {
+        let autocomplete = new CKEDITOR.plugins.autocomplete(evt.editor, {
             textTestCallback: textTestCallback,
             dataCallback: dataCallback,
             itemTemplate: itemTemplate,
@@ -107,7 +107,7 @@ var setupAutocomplete = function (editor) {
         // then manually replace them due to the way CKEditor's 
         // templating works.
         autocomplete.getHtmlToInsert = function (item) {
-            var parsedTemplate = this.outputTemplate.output(item);
+            let parsedTemplate = this.outputTemplate.output(item);
             parsedTemplate = parsedTemplate.replace("[[", "{{").replace("]]", "}}")
             return parsedTemplate
         }

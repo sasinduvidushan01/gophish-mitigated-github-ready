@@ -24,7 +24,7 @@ $(document).ready(function () {
     })
     //$("#imapForm").submit(function (e) {
     $("#savesettings").click(function() {
-        var imapSettings = {}
+        let imapSettings = {}
         imapSettings.host = $("#imaphost").val()
         imapSettings.port = $("#imapport").val()
         imapSettings.username = $("#imapusername").val()
@@ -86,7 +86,7 @@ $(document).ready(function () {
     $("#validateimap").click(function() {
 
         // Query validate imap server endpoint
-        var server = {}
+        let server = {}
         server.host = $("#imaphost").val()
         server.port = $("#imapport").val()
         server.username = $("#imapusername").val()
@@ -114,7 +114,7 @@ $(document).ready(function () {
             return false
         }
 
-        var oldHTML = $("#validateimap").html();
+        let oldHTML = $("#validateimap").html();
         // Disable inputs and change button text
         $("#imaphost").attr("disabled", true);
         $("#imapport").attr("disabled", true);
@@ -228,7 +228,7 @@ $(document).ready(function () {
         })
     }
 
-    var use_map = localStorage.getItem('gophish.use_map')
+    let use_map = localStorage.getItem('gophish.use_map')
     $("#use_map").prop('checked', JSON.parse(use_map))
     $("#use_map").on('change', function () {
         localStorage.setItem('gophish.use_map', JSON.stringify(this.checked))

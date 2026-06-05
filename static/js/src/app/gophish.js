@@ -63,14 +63,14 @@ function unescapeHtml(html) {
  * @param {string} string - The input string to capitalize
  * 
  */
-var capitalize = function (string) {
+let capitalize = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /*
 Define our API Endpoints
 */
-var api = {
+let api = {
     // campaigns contains the endpoints for /campaigns
     campaigns: {
         // get() - Queries the API for GET /campaigns
@@ -298,7 +298,7 @@ window.api = api
 // Register our moment.js datatables listeners
 $(document).ready(function () {
     // Setup nav highlighting
-    var path = location.pathname;
+    let path = location.pathname;
     $('.nav-sidebar li').each(function () {
         var $this = $(this);
         // if the current path is like this link, make it active

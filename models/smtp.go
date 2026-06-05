@@ -1,5 +1,7 @@
 package models
 
+const smtpIdQuery = "smtp_id=?"
+
 import (
 	"crypto/tls"
 	"errors"
@@ -138,7 +140,7 @@ func GetSMTPs(uid int64) ([]SMTP, error) {
 		return ss, err
 	}
 	for i := range ss {
-		err = db.Where("smtp_id=?", ss[i].Id).Find(&ss[i].Headers).Error
+		err = db.Where(smtpIdQuery, ss[i].Id).Find(&ss[i].Headers).Error
 		if err != nil && err != gorm.ErrRecordNotFound {
 			log.Error(err)
 			return ss, err
@@ -155,7 +157,7 @@ func GetSMTP(id int64, uid int64) (SMTP, error) {
 		log.Error(err)
 		return s, err
 	}
-	err = db.Where("smtp_id=?", s.Id).Find(&s.Headers).Error
+	err = db.Where(smtpIdQuery, s.Id).Find(&s.Headers).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 		return s, err
@@ -171,7 +173,7 @@ func GetSMTPByName(n string, uid int64) (SMTP, error) {
 		log.Error(err)
 		return s, err
 	}
-	err = db.Where("smtp_id=?", s.Id).Find(&s.Headers).Error
+	err = db.Where(smtpIdQuery, s.Id).Find(&s.Headers).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 	}
@@ -215,7 +217,7 @@ func PutSMTP(s *SMTP) error {
 		log.Error(err)
 	}
 	// Delete all custom headers, and replace with new ones
-	err = db.Where("smtp_id=?", s.Id).Delete(&Header{}).Error
+	err = db.Where(smtpIdQuery, s.Id).Delete(&Header{}).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Error(err)
 		return err
@@ -236,7 +238,7 @@ func PutSMTP(s *SMTP) error {
 // An error is returned if a SMTP with the given user id and SMTP id is not found.
 func DeleteSMTP(id int64, uid int64) error {
 	// Delete all custom headers
-	err := db.Where("smtp_id=?", id).Delete(&Header{}).Error
+	err := db.Where(smtpIdQuery, id).Delete(&Header{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

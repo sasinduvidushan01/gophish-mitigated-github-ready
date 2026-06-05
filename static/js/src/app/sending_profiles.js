@@ -1,15 +1,15 @@
-var profiles = []
+let profiles = []
 
 // Attempts to send a test email by POSTing to /campaigns/
 function sendTestEmail() {
-    var headers = [];
+    let headers = [];
     $.each($("#headersTable").DataTable().rows().data(), function (i, header) {
         headers.push({
             key: unescapeHtml(header[0]),
             value: unescapeHtml(header[1]),
         })
     })
-    var test_email_request = {
+    let test_email_request = {
         template: {},
         first_name: $("input[name=to_first_name]").val(),
         last_name: $("input[name=to_last_name]").val(),
@@ -43,7 +43,7 @@ function sendTestEmail() {
 
 // Save attempts to POST to /smtp/
 function save(idx) {
-    var profile = {
+    let profile = {
         headers: []
     }
     $.each($("#headersTable").DataTable().rows().data(), function (i, header) {
@@ -97,13 +97,13 @@ function dismiss() {
     $("#modal").modal('hide')
 }
 
-var dismissSendTestEmailModal = function () {
+let dismissSendTestEmailModal = function () {
     $("#sendTestEmailModal\\.flashes").empty()
     $("#sendTestModalSubmit").html("<i class='fa fa-envelope'></i> Send")
 }
 
 
-var deleteProfile = function (idx) {
+let deleteProfile = function (idx) {
     Swal.fire({
         title: "Are you sure?",
         text: "This will delete the sending profile. This can't be undone!",
@@ -151,7 +151,7 @@ function edit(idx) {
     $("#modalSubmit").unbind('click').click(function () {
         save(idx)
     })
-    var profile = {}
+    let profile = {}
     if (idx != -1) {
         $("#profileModalLabel").text("Edit Sending Profile")
         profile = profiles[idx]
@@ -174,7 +174,7 @@ function copy(idx) {
     $("#modalSubmit").unbind('click').click(function () {
         save(-1)
     })
-    var profile = {}
+    let profile = {}
     profile = profiles[idx]
     $("#name").val("Copy of " + profile.name)
     $("#interface_type").val(profile.interface_type)
@@ -234,15 +234,15 @@ function load() {
 
 function addCustomHeader(header, value) {
     // Create new data row.
-    var newRow = [
+    let newRow = [
         escapeHtml(header),
         escapeHtml(value),
         '<span style="cursor:pointer;"><i class="fa fa-trash-o"></i></span>'
     ];
 
     // Check table to see if header already exists.
-    var headersTable = headers.DataTable();
-    var existingRowIndex = headersTable
+    let headersTable = headers.DataTable();
+    let existingRowIndex = headersTable
         .column(0) // Email column has index of 2
         .data()
         .indexOf(escapeHtml(header));

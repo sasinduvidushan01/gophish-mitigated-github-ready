@@ -1,5 +1,7 @@
 package dialer
 
+const zeroSixteen = "0.0/16"
+
 import (
 	"fmt"
 	"net"
@@ -82,7 +84,7 @@ func (d *RestrictedDialer) Dialer() *net.Dialer {
 // defaultDeny represents the list of IP ranges that we want to block unless
 // explicitly overriden.
 var defaultDeny = []string{
-	"169.254." + "0.0/16", // Link-local (used for VPS instance metadata)
+	"169.254." + zeroSixteen, // Link-local (used for VPS instance metadata)
 }
 
 // allInternal represents all internal hosts such that the only connections
@@ -93,9 +95,9 @@ var allInternal = []string{
 	"10.0." + "0.0/8",         // RFC1918
 	"100.64." + "0.0/10",      // CGNAT
 	"172.16." + "0.0/12",      // RFC1918
-	"169.254." + "0.0/16",     // RFC3927 link-local
+	"169.254." + zeroSixteen,     // RFC3927 link-local
 	"192.88." + "99.0/24",     // IPv6 to IPv4 Relay
-	"192.168." + "0.0/16",     // RFC1918
+	"192.168." + zeroSixteen,     // RFC1918
 	"198.51." + "100.0/24",    // TEST-NET-2
 	"203.0." + "113.0/24",     // TEST-NET-3
 	"224.0." + "0.0/4",        // Multicast

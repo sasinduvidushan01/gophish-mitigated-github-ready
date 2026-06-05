@@ -1,6 +1,6 @@
 // labels is a map of campaign statuses to
 // CSS classes
-var labels = {
+let labels = {
     "In progress": "label-primary",
     "Queued": "label-info",
     "Completed": "label-success",
@@ -8,8 +8,8 @@ var labels = {
     "Error": "label-danger"
 }
 
-var campaigns = []
-var campaign = {}
+let campaigns = []
+let campaign = {}
 
 // Launch attempts to POST to /campaigns/
 function launch() {
@@ -33,7 +33,7 @@ function launch() {
                     });
                 })
                 // Validate our fields
-                var send_by_date = $("#send_by_date").val()
+                let send_by_date = $("#send_by_date").val()
                 if (send_by_date != "") {
                     send_by_date = moment(send_by_date, "MMMM Do YYYY, h:mm a").utc().format()
                 }
@@ -82,7 +82,7 @@ function launch() {
 
 // Attempts to send a test email by POSTing to /campaigns/
 function sendTestEmail() {
-    var test_email_request = {
+    let test_email_request = {
         template: {
             name: $("#template").select2("data")[0].text
         },
@@ -169,7 +169,7 @@ function setupOptions() {
                 modalError("No groups found!")
                 return false;
             } else {
-                var group_s2 = $.map(groups, function (obj) {
+                let group_s2 = $.map(groups, function (obj) {
                     obj.text = obj.name
                     obj.title = obj.num_targets + " targets"
                     return obj
@@ -187,11 +187,11 @@ function setupOptions() {
                 modalError("No templates found!")
                 return false
             } else {
-                var template_s2 = $.map(templates, function (obj) {
+                let template_s2 = $.map(templates, function (obj) {
                     obj.text = obj.name
                     return obj
                 });
-                var template_select = $("#template.form-control")
+                let template_select = $("#template.form-control")
                 template_select.select2({
                     placeholder: "Select a Template",
                     data: template_s2,
@@ -208,11 +208,11 @@ function setupOptions() {
                 modalError("No pages found!")
                 return false
             } else {
-                var page_s2 = $.map(pages, function (obj) {
+                let page_s2 = $.map(pages, function (obj) {
                     obj.text = obj.name
                     return obj
                 });
-                var page_select = $("#page.form-control")
+                let page_select = $("#page.form-control")
                 page_select.select2({
                     placeholder: "Select a Landing Page",
                     data: page_s2,
@@ -229,11 +229,11 @@ function setupOptions() {
                 modalError("No profiles found!")
                 return false
             } else {
-                var profile_s2 = $.map(profiles, function (obj) {
+                let profile_s2 = $.map(profiles, function (obj) {
                     obj.text = obj.name
                     return obj
                 });
-                var profile_select = $("#profile.form-control")
+                let profile_select = $("#profile.form-control")
                 profile_select.select2({
                     placeholder: "Select a Sending Profile",
                     data: profile_s2,
@@ -372,16 +372,16 @@ $(document).ready(function () {
                     label = labels[campaign.status] || "label-default";
 
                     //section for tooltips on the status of a campaign to show some quick stats
-                    var launchDate;
+                    let launchDate;
                     if (moment(campaign.launch_date).isAfter(moment())) {
                         launchDate = "Scheduled to start: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
+                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
                     } else {
                         launchDate = "Launch Date: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
+                        let quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
                     }
 
-                    var row = [
+                    let row = [
                         escapeHtml(campaign.name),
                         moment(campaign.created_date).format('MMMM Do YYYY, h:mm:ss a'),
                         "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"right\" data-html=\"true\" title=\"" + quickStats + "\">" + campaign.status + "</span>",

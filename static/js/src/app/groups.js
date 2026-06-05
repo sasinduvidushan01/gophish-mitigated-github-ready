@@ -1,8 +1,8 @@
-var groups = []
+let groups = []
 
 // Save attempts to POST or PUT to /groups/
 function save(id) {
-    var targets = []
+    let targets = []
     $.each($("#targetsTable").DataTable().rows().data(), function (i, target) {
         targets.push({
             first_name: unescapeHtml(target[0]),
@@ -11,7 +11,7 @@ function save(id) {
             position: unescapeHtml(target[3])
         })
     })
-    var group = {
+    let group = {
         name: $("#name").val(),
         targets: targets
     }
@@ -65,7 +65,7 @@ function edit(id) {
     })
     if (id == -1) {
         $("#groupModalLabel").text("New Group");
-        var group = {}
+        let group = {}
     } else {
         $("#groupModalLabel").text("Edit Group");
         api.groupId.get(id)
@@ -96,8 +96,8 @@ function edit(id) {
         },
         add: function (e, data) {
             $("#modal\\.flashes").empty()
-            var acceptFileTypes = /(csv|txt)$/i;
-            var filename = data.originalFiles[0]['name']
+            let acceptFileTypes = /(csv|txt)$/i;
+            let filename = data.originalFiles[0]['name']
             if (filename && !acceptFileTypes.test(filename.split(".").pop())) {
                 modalError("Unsupported file extension (use .csv or .txt)")
                 return false;
@@ -117,23 +117,23 @@ function edit(id) {
     })
 }
 
-var downloadCSVTemplate = function () {
-    var csvScope = [{
+let downloadCSVTemplate = function () {
+    let csvScope = [{
         'First Name': 'Example',
         'Last Name': 'User',
         'Email': 'foobar@example.com',
         'Position': 'Systems Administrator'
     }]
-    var filename = 'group_template.csv'
-    var csvString = Papa.unparse(csvScope, {})
-    var csvData = new Blob([csvString], {
+    let filename = 'group_template.csv'
+    let csvString = Papa.unparse(csvScope, {})
+    let csvData = new Blob([csvString], {
         type: 'text/csv;charset=utf-8;'
     });
     if (navigator.msSaveBlob) {
         navigator.msSaveBlob(csvData, filename);
     } else {
-        var csvURL = window.URL.createObjectURL(csvData);
-        var dlLink = document.createElement('a');
+        let csvURL = window.URL.createObjectURL(csvData);
+        let dlLink = document.createElement('a');
         dlLink.href = csvURL;
         dlLink.setAttribute('download', filename)
         document.body.appendChild(dlLink)
@@ -143,8 +143,8 @@ var downloadCSVTemplate = function () {
 }
 
 
-var deleteGroup = function (id) {
-    var group = groups.find(function (x) {
+let deleteGroup = function (id) {
+    let group = groups.find(function (x) {
         return x.id === id
     })
     if (!group) {
@@ -187,8 +187,8 @@ var deleteGroup = function (id) {
 
 function addTarget(firstNameInput, lastNameInput, emailInput, positionInput) {
     // Create new data row.
-    var email = escapeHtml(emailInput).toLowerCase();
-    var newRow = [
+    let email = escapeHtml(emailInput).toLowerCase();
+    let newRow = [
         escapeHtml(firstNameInput),
         escapeHtml(lastNameInput),
         email,
@@ -197,8 +197,8 @@ function addTarget(firstNameInput, lastNameInput, emailInput, positionInput) {
     ];
 
     // Check table to see if email already exists.
-    var targetsTable = targets.DataTable();
-    var existingRowIndex = targetsTable
+    let targetsTable = targets.DataTable();
+    let existingRowIndex = targetsTable
         .column(2, {
             order: "index"
         }) // Email column has index of 2
@@ -227,7 +227,7 @@ function load() {
                 groups = response.groups
                 $("#emptyMessage").hide()
                 $("#groupTable").show()
-                var groupTable = $("#groupTable").DataTable({
+                let groupTable = $("#groupTable").DataTable({
                     destroy: true,
                     columnDefs: [{
                         orderable: false,
@@ -265,7 +265,7 @@ $(document).ready(function () {
     // Handle manual additions
     $("#targetForm").submit(function () {
         // Validate the form data
-        var targetForm = document.getElementById("targetForm")
+        let targetForm = document.getElementById("targetForm")
         if (!targetForm.checkValidity()) {
             targetForm.reportValidity()
             return
