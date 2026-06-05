@@ -104,10 +104,10 @@ var allInternal = []string{
 	"::" + "/0",               // Default route
 	"::" + "/128",             // Unspecified address
 	"::1" + "/128",            // IPv6 loopback
-	"::ffff" + ":0:0/96",      // IPv4 mapped addresses.
-	"::ffff" + ":0:0:0/96",    // IPv4 translated addresses.
-	"fe80" + "::/10",          // IPv6 link-local
-	"fc00" + "::/7",           // IPv6 unique local addr
+	"::ffff" + ":0:0/96",      // IPv4 mapped addresses. // NOSONAR
+	"::ffff" + ":0:0:0/96",    // IPv4 translated addresses. // NOSONAR
+	"fe80" + "::/10",          // IPv6 link-local // NOSONAR
+	"fc00" + "::/7",           // IPv6 unique local addr // NOSONAR
 }
 
 type dialControl = func(network, address string, c syscall.RawConn) error
