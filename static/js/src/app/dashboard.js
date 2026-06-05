@@ -107,11 +107,10 @@ function renderPieChart(chartopts) {
             type: 'pie',
             events: {
                 load: function () {
-                    let currentChart = this,
-                        rend = currentChart.renderer,
-                        pie = currentChart.series[0],
-                        left = currentChart.plotLeft + pie.center[0],
-                        top = currentChart.plotTop + pie.center[1];
+                    const rend = this.renderer,
+                        pie = this.series[0],
+                        left = this.plotLeft + pie.center[0],
+                        top = this.plotTop + pie.center[1];
                     this.innerText = rend.text(chartopts['data'][0].count, left, top).
                     attr({
                         'text-anchor': 'middle',
@@ -178,19 +177,23 @@ function generateStatsPieCharts(campaigns) {
     $.each(stats_series_data, function (status, count) {
         // I don't like this, but I guess it'll have to work.
         // Turns submitted_data into Submitted Data
-        if (!(status in statsMapping)) {
+        if (status in statsMapping) {
+            // proceed
+        } else {
             return true
         }
-        status_label = statsMapping[status]
-        stats_data.push({
-            name: status_label,
-            y: Math.floor((count / total) * 100),
-            count: count
-        })
-        stats_data.push({
-            name: '',
-            y: 100 - Math.floor((count / total) * 100)
-        })
+        let status_label = statsMapping[status]
+        stats_data.push(
+            {
+                name: status_label,
+                y: Math.floor((count / total) * 100),
+                count: count
+            },
+            {
+                name: '',
+                y: 100 - Math.floor((count / total) * 100)
+            }
+        )
         renderPieChart({
             elemId: status + '_chart',
             title: status_label,

@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 
 module.exports = {
     context: path.resolve(__dirname, 'static', 'js', 'src', 'app'),

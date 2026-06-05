@@ -247,7 +247,7 @@ func (c *Campaign) getFromAddress() string {
 }
 
 // generateSendDate creates a sendDate
-func (c *Campaign) generateSendDate(idx int, totalRecipients int) time.Time {
+func (c *Campaign) generateSendDate(idx, totalRecipients int) time.Time {
 	// If no send date is specified, just return the launch date
 	if c.SendByDate.IsZero() || c.SendByDate.Equal(c.LaunchDate) {
 		return c.LaunchDate

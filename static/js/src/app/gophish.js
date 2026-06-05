@@ -293,14 +293,14 @@ let api = {
         return query("/reset", "POST", {}, true)
     }
 }
-window.api = api
+globalThis.api = api
 
 // Register our moment.js datatables listeners
 $(document).ready(function () {
     // Setup nav highlighting
     let path = location.pathname;
     $('.nav-sidebar li').each(function () {
-        var $this = $(this);
+        let $this = $(this);
         // if the current path is like this link, make it active
         if ($this.find("a").attr('href') === path) {
             $this.addClass('active');

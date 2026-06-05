@@ -26,7 +26,7 @@ function save(idx) {
     template.html = template.html.replace(/https?:\/\/{{\.URL}}/gi, "{{.URL}}")
     // If the "Add Tracker Image" checkbox is checked, add the tracker
     if ($("#use_tracker_checkbox").prop("checked")) {
-        if (template.html.indexOf("{{.Tracker}}") == -1 &&
+        if (template.html!.includes("{{.Tracker}}") &&
             template.html.indexOf("{{.TrackingUrl}}") == -1) {
             template.html = template.html.replace("</body>", "{{.Tracker}}</body>")
         }
@@ -115,15 +115,7 @@ let deleteTemplate = function (idx) {
     })
 }
 
-function deleteTemplate(idx) {
-    if (confirm("Delete " + templates[idx].name + "?")) {
-        api.templateId.delete(templates[idx].id)
-            .success(function (data) {
-                successFlash(data.message)
-                load()
-            })
-    }
-}
+// deleteTemplate defined above
 
 function attach(files) {
     let attachmentsTable = $("#attachmentsTable").DataTable({
@@ -207,7 +199,7 @@ function edit(idx) {
             ])
         })
         attachmentsTable.rows.add(attachmentRows).draw()
-        if (template.html.indexOf("{{.Tracker}}") != -1) {
+        if (template.html.includes("{{.Tracker}}")) {
             $("#use_tracker_checkbox").prop("checked", true)
         } else {
             $("#use_tracker_checkbox").prop("checked", false)
@@ -246,10 +238,7 @@ function copy(idx) {
             targets: [3, 4]
         }]
     });
-    let template = {
-        attachments: []
-    }
-    template = templates[idx]
+    let template = templates[idx]
     $("#name").val("Copy of " + template.name)
     $("#subject").val(template.subject)
     $("#envelope-sender").val(template.envelope_sender)
@@ -272,7 +261,7 @@ function copy(idx) {
             .remove()
             .draw();
     })
-    if (template.html.indexOf("{{.Tracker}}") != -1) {
+    if (template.html.includes("{{.Tracker}}")) {
         $("#use_tracker_checkbox").prop("checked", true)
     } else {
         $("#use_tracker_checkbox").prop("checked", false)
@@ -361,7 +350,7 @@ $(document).ready(function () {
     });
     $('.modal').on('shown.bs.modal', function (event) {
         // Keep track of the number of open modals
-        if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
+        if ($('body').data('fv_open_modals') === undefined) {
             $('body').data('fv_open_modals', 0);
         }
         // if the z-index of this modal has been set, ignore.

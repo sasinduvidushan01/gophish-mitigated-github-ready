@@ -520,11 +520,10 @@ let renderPieChart = function (chartopts) {
             type: 'pie',
             events: {
                 load: function () {
-                    let currentChart = this,
-                        rend = currentChart.renderer,
-                        pie = currentChart.series[0],
-                        left = currentChart.plotLeft + pie.center[0],
-                        top = currentChart.plotTop + pie.center[1];
+                    const rend = this.renderer,
+                        pie = this.series[0],
+                        left = this.plotLeft + pie.center[0],
+                        top = this.plotTop + pie.center[1];
                     this.innerText = rend.text(chartopts['data'][0].count, left, top).
                     attr({
                         'text-anchor': 'middle',
@@ -673,15 +672,17 @@ function poll() {
                 if (!(status in statusMapping)) {
                     return true
                 }
-                email_data.push({
-                    name: status,
-                    y: Math.floor((count / campaign.results.length) * 100),
-                    count: count
-                })
-                email_data.push({
-                    name: '',
-                    y: 100 - Math.floor((count / campaign.results.length) * 100)
-                })
+                email_data.push(
+                    {
+                        name: status,
+                        y: Math.floor((count / campaign.results.length) * 100),
+                        count: count
+                    },
+                    {
+                        name: '',
+                        y: 100 - Math.floor((count / campaign.results.length) * 100)
+                    }
+                )
                 let chart = $("#" + statusMapping[status] + "_chart").highcharts()
                 chart.series[0].update({
                     data: email_data
@@ -859,15 +860,17 @@ function load() {
                     if (!(status in statusMapping)) {
                         return true
                     }
-                    email_data.push({
-                        name: status,
-                        y: Math.floor((count / campaign.results.length) * 100),
-                        count: count
-                    })
-                    email_data.push({
-                        name: '',
-                        y: 100 - Math.floor((count / campaign.results.length) * 100)
-                    })
+                    email_data.push(
+                        {
+                            name: status,
+                            y: Math.floor((count / campaign.results.length) * 100),
+                            count: count
+                        },
+                        {
+                            name: '',
+                            y: 100 - Math.floor((count / campaign.results.length) * 100)
+                        }
+                    )
                     renderPieChart({
                         elemId: statusMapping[status] + '_chart',
                         title: status,

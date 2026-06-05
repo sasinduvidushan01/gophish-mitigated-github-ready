@@ -140,7 +140,7 @@ let deleteProfile = function (idx) {
 }
 
 function edit(idx) {
-    headers = $("#headersTable").dataTable({
+    let headers = $("#headersTable").dataTable({
         destroy: true, // Destroy any other instantiated table - http://datatables.net/manual/tech-notes/3#destroy
         columnDefs: [{
             orderable: false,
@@ -269,7 +269,7 @@ $(document).ready(function () {
     });
     $('.modal').on('shown.bs.modal', function (event) {
         // Keep track of the number of open modals
-        if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
+        if ($('body').data('fv_open_modals') === undefined) {
             $('body').data('fv_open_modals', 0);
         }
         // if the z-index of this modal has been set, ignore.
@@ -315,7 +315,7 @@ $(document).ready(function () {
         let headerValue = $(this).find("input.headerValue").val();
 
         if (headerKey == "" || headerValue == "") {
-            return false;
+            return;
         }
         addCustomHeader(headerKey, headerValue);
         // Reset user input.

@@ -53,7 +53,7 @@ function dismiss() {
 }
 
 function edit(id) {
-    targets = $("#targetsTable").dataTable({
+    let targets = $("#targetsTable").dataTable({
         destroy: true, // Destroy any other instantiated table - http://datatables.net/manual/tech-notes/3#destroy
         columnDefs: [{
             orderable: false,
@@ -65,7 +65,6 @@ function edit(id) {
     })
     if (id == -1) {
         $("#groupModalLabel").text("New Group");
-        let group = {}
     } else {
         $("#groupModalLabel").text("Edit Group");
         api.groupId.get(id)
@@ -132,7 +131,7 @@ let downloadCSVTemplate = function () {
     if (navigator.msSaveBlob) {
         navigator.msSaveBlob(csvData, filename);
     } else {
-        let csvURL = window.URL.createObjectURL(csvData);
+        let csvURL = globalThis.URL.createObjectURL(csvData);
         let dlLink = document.createElement('a');
         dlLink.href = csvURL;
         dlLink.setAttribute('download', filename)

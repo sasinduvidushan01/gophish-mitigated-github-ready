@@ -316,7 +316,7 @@ $(document).ready(function () {
     });
     $('.modal').on('shown.bs.modal', function (event) {
         // Keep track of the number of open modals
-        if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
+        if ($('body').data('fv_open_modals') === undefined) {
             $('body').data('fv_open_modals', 0);
         }
         // if the z-index of this modal has been set, ignore.

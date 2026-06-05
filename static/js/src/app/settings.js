@@ -63,7 +63,7 @@ $(document).ready(function () {
         }
 
         api.IMAP.post(imapSettings).done(function (data) {
-                if (data.success == true) {
+                if (data.success) {
                     successFlashFade("Successfully updated IMAP settings.", 2)
                 } else {
                     errorFlash("Unable to update IMAP settings.")
@@ -132,7 +132,7 @@ $(document).ready(function () {
         $("#validateimap").html("<i class='fa fa-circle-o-notch fa-spin'></i> Testing...");
         
         api.IMAP.validate(server).done(function(data) {
-            if (data.success == true) {
+            if (data.success) {
                 Swal.fire({
                     title: "Success",
                     html: "Logged into <b>" + escapeHtml($("#imaphost").val()) + "</b>",
@@ -202,7 +202,7 @@ $(document).ready(function () {
                 $('#lastlogindiv').hide()
             } else {
                 imap = imap[0]
-                if (imap.enabled == false){
+                if (!imap.enabled){
                     $('#lastlogindiv').hide()
                 } else {
                     $('#lastlogindiv').show()

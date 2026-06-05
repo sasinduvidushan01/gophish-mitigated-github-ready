@@ -170,7 +170,7 @@ const impersonate = (id) => {
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.value) {
-                            window.location.href = "/"
+                            globalThis.location.href = "/"
                         }});
                 } else {
                     Swal.fire({
@@ -205,7 +205,7 @@ const load = () => {
             $.each(users, (i, user) => {
                 let lastlogin = ""
                 if (user.last_login != "0001-01-01T00:00:00Z") {
-                    let lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
+                    lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
                 }
                 userRows.push([
                     escapeHtml(user.username),

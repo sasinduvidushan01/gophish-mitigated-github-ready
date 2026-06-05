@@ -1,8 +1,10 @@
 package logger
 
-import "testing"
+import (
+	"testing"
 
-import "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
+)
 
 func TestLogLevel(t *testing.T) {
 	tests := map[string]logrus.Level{
