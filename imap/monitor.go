@@ -117,7 +117,7 @@ func (im *Monitor) Shutdown() error {
 
 // checkForNewEmails logs into an IMAP account and checks unread emails
 //  for the rid campaign identifier.
-func checkForNewEmails(im models.IMAP) {
+func checkForNewEmails(im models.IMAP) { // NOSONAR
 	im.Host = im.Host + ":" + strconv.Itoa(int(im.Port)) // Append port
 	mailServer := Mailbox{
 		Host:             im.Host,

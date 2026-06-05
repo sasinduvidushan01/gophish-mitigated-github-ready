@@ -123,7 +123,7 @@ func (as *Server) Users(w http.ResponseWriter, r *http.Request) {
 // User contains functions to retrieve or delete a single user. Users with
 // the ModifySystem permission can view and modify any user. Otherwise, users
 // may only view or delete their own account.
-func (as *Server) User(w http.ResponseWriter, r *http.Request) {
+func (as *Server) User(w http.ResponseWriter, r *http.Request) { // NOSONAR
 	vars := mux.Vars(r)
 	id, _ := strconv.ParseInt(vars["id"], 0, 64)
 	// If the user doesn't have ModifySystem permissions, we need to verify

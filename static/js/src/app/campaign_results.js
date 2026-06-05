@@ -118,7 +118,7 @@ let campaign = {}
 let bubbles = []
 
 function dismiss() { // NOSONAR
-    $("#modal\\.flashes").empty()
+    $(String.raw`#modal\.flashes`).empty()
     $("#modal").modal('hide')
     $("#resultsTable").dataTable().DataTable().clear().draw()
 }

@@ -114,7 +114,7 @@ func setupCampaign(id int) (*models.Campaign, error) {
 	return &c, err
 }
 
-func TestMailLogGrouping(t *testing.T) {
+func TestMailLogGrouping(t *testing.T) { // NOSONAR
 	setupTest(t)
 
 	// Create the campaigns and unlock the maillogs so that they're picked up

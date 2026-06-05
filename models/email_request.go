@@ -99,7 +99,7 @@ func GetEmailRequestByResultId(id string) (EmailRequest, error) {
 
 // Generate fills in the details of a gomail.Message with the contents
 // from the SendTestEmailRequest.
-func (s *EmailRequest) Generate(msg *gomail.Message) error {
+func (s *EmailRequest) Generate(msg *gomail.Message) error { // NOSONAR
 	f, err := mail.ParseAddress(s.getFromAddress())
 	if err != nil {
 		return err

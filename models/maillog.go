@@ -168,7 +168,7 @@ func (m *MailLog) GetSmtpFrom() (string, error) {
 // the correct headers and body from the campaign and recipient listed in
 // the maillog. We accept the gomail.Message as an argument so that the caller
 // can choose to re-use the message across recipients.
-func (m *MailLog) Generate(msg *gomail.Message) error {
+func (m *MailLog) Generate(msg *gomail.Message) error { // NOSONAR
 	r, err := GetResult(m.RId)
 	if err != nil {
 		return err

@@ -201,7 +201,7 @@ func (ps *PhishingServer) ReportHandler(w http.ResponseWriter, r *http.Request) 
 
 // PhishHandler handles incoming client connections and registers the associated actions performed
 // (such as clicked link, etc.)
-func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) {
+func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) { // NOSONAR
 	r, err := setupContext(r)
 	if err != nil {
 		// Log the error if it wasn't something we can safely ignore

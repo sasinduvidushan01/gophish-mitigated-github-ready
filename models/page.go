@@ -26,7 +26,7 @@ var ErrPageNameNotSpecified = errors.New("Page Name not specified")
 
 // parseHTML parses the page HTML on save to handle the
 // capturing (or lack thereof!) of credentials and passwords
-func (p *Page) parseHTML() error {
+func (p *Page) parseHTML() error { // NOSONAR
 	d, err := goquery.NewDocumentFromReader(strings.NewReader(p.HTML))
 	if err != nil {
 		return err

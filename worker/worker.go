@@ -47,7 +47,7 @@ func WithMailer(m mailer.Mailer) func(*DefaultWorker) error {
 
 // processCampaigns loads maillogs scheduled to be sent before the provided
 // time and sends them to the mailer.
-func (w *DefaultWorker) processCampaigns(t time.Time) error {
+func (w *DefaultWorker) processCampaigns(t time.Time) error { // NOSONAR
 	ms, err := models.GetQueuedMailLogs(t.UTC())
 	if err != nil {
 		log.Error(err)

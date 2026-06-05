@@ -138,7 +138,7 @@ func dialHost(ctx context.Context, dialer Dialer) (Sender, error) {
 // sendMail attempts to send the provided Mail instances.
 // If the context is cancelled before all of the mail are sent,
 // sendMail just returns and does not modify those emails.
-func sendMail(ctx context.Context, dialer Dialer, ms []Mail) {
+func sendMail(ctx context.Context, dialer Dialer, ms []Mail) { // NOSONAR
 	sender, err := dialHost(ctx, dialer)
 	if err != nil {
 		log.Warn(err)

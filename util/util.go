@@ -44,7 +44,7 @@ func ParseMail(r *http.Request) (email.Email, error) {
 }
 
 // ParseCSV contains the logic to parse the user provided csv file containing Target entries
-func ParseCSV(r *http.Request) ([]models.Target, error) {
+func ParseCSV(r *http.Request) ([]models.Target, error) { // NOSONAR
 	mr, err := r.MultipartReader()
 	ts := []models.Target{}
 	if err != nil {

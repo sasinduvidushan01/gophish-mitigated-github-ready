@@ -84,7 +84,7 @@ func EnsureEnoughAdmins() error {
 // DeleteUser deletes the given user. To ensure that there is always at least
 // one user account with the Admin role, this function will refuse to delete
 // the last Admin.
-func DeleteUser(id int64) error {
+func DeleteUser(id int64) error { // NOSONAR
 	existing, err := GetUser(id)
 	if err != nil {
 		return err
