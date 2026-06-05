@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -122,7 +123,12 @@ func (as *Server) ImportSite(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	client := &http.Client{Transport: tr}
-	resp, err := client.Get(cr.URL)
+	u, err := url.ParseRequestURI(cr.URL)
+	if err != nil || (u.Scheme != "http" && u.Scheme != "https") {
+		JSONResponse(w, models.Response{Success: false, Message: "Invalid URL scheme"}, http.StatusBadRequest)
+		return
+	}
+	resp, err := client.Get(u.String())
 	if err != nil {
 		JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusBadRequest)
 		return

@@ -1,0 +1,40 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: go, javascript-typescript
+          config: |
+            paths-ignore:
+              - 'static/**/vendor/**'
+              - 'static/**/ckeditor/**'
+              - 'static/**/app/autocomplete.js'
+              - 'static/**/dialogs/ciframe.html'
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
+      - run: |
+          go mod download
+          go build ./...
+
+      - uses: github/codeql-action/analyze@v3
