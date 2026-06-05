@@ -52,7 +52,7 @@ $(document).ready(function () {
             document.documentElement.scrollTop = 0;
             return false
         }
-        if (isNaN(imapSettings.port) || imapSettings.port <1 || imapSettings.port > 65535  ){ 
+        if (Number.isNaN(imapSettings.port) || imapSettings.port <1 || imapSettings.port > 65535  ){ 
             errorFlash("Invalid IMAP Port")
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
@@ -107,7 +107,7 @@ $(document).ready(function () {
             document.documentElement.scrollTop = 0;
             return false
         }
-        if (isNaN(server.port) || server.port <1 || server.port > 65535  ){
+        if (Number.isNaN(server.port) || server.port <1 || server.port > 65535  ){
             errorFlash("Invalid IMAP Port")
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;

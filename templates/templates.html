@@ -44,7 +44,7 @@
                 <h4 class="modal-title" id="templateModalLabel">New Template</h4>
             </div>
             <div class="modal-body">
-                <div class="row" id="modal.flashes"></div>
+                <div class="row" id="modal-flashes-tpl"></div>
                 <label class="control-label" for="name">Name:</label>
                 <div class="form-group">
                     <input type="text" class="form-control" ng-model="template.name" placeholder="Template name" id="name"
@@ -65,8 +65,8 @@
                 </div>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active" role="text"><a href="#text" aria-controls="text" role="tab" data-toggle="tab">Text</a></li>
-                    <li role="html"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML</a></li>
+                    <li class="active" ><a href="#text" aria-controls="text" role="tab" data-toggle="tab">Text</a></li>
+                    <li ><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -103,7 +103,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default" onclick="dismiss()">Cancel</button>
-                <button type="button" class="btn btn-primary" id="modalSubmit">Save Template</button>
+                <button type="button" class="btn btn-primary" id="modalSubmit-tpl">Save Template</button>
             </div>
         </div>
     </div>
@@ -118,7 +118,7 @@
                 <h4 class="modal-title" id="importEmailModalLabel">Import Email</h4>
             </div>
             <div class="modal-body">
-                <div class="row" id="modal.flashes"></div>
+                <div class="row" id="modal-flashes-tpl"></div>
                 <label class="control-label" for="email">Email Content:</label>
                 <div class="form-group">
                     <textarea rows="10" id="email_content" class="gophish-editor form-control" placeholder="Raw Email Source"></textarea>
@@ -130,7 +130,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
-                <button type="button" class="btn btn-primary" id="modalSubmit" onclick="importEmail()">Import</button>
+                <button type="button" class="btn btn-primary" id="modalSubmit-tpl" onclick="importEmail()">Import</button>
             </div>
         </div>
     </div>

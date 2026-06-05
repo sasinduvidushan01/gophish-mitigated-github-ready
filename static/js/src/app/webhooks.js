@@ -16,7 +16,7 @@ const saveWebhook = (id) => {
         is_active: $("#is_active").is(":checked"),
     };
     if (id != -1) {
-        wh.id = parseInt(id);
+        wh.id = Number.parseInt(id);
         api.webhookId.put(wh)
             .success(function(data) {
                 dismiss();

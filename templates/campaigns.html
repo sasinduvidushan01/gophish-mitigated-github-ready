@@ -5,7 +5,7 @@
             Campaigns
         </h1>
     </div>
-    <div id="flashes" class="row"></div>
+    <div id="flashes-camp" class="row"></div>
     <div class="row">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#modal"
             onclick="edit('new')">
@@ -14,20 +14,20 @@
     &nbsp;
 
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active" role="activeCampaigns"><a href="#activeCampaigns" aria-controls="activeCampaigns" role="tab"
+        <li class="active" ><a href="#activeCampaigns" aria-controls="activeCampaigns" role="tab"
                 data-toggle="tab">Active Campaigns</a></li>
-        <li role="archivedCampaigns"><a href="#archivedCampaigns" aria-controls="archivedCampaigns" role="tab"
+        <li ><a href="#archivedCampaigns" aria-controls="archivedCampaigns" role="tab"
                 data-toggle="tab">Archived Campaigns</a></li>
     </ul>
     </br>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="activeCampaigns">
-            <div id="flashes" class="row"></div>
+            <div id="flashes-camp" class="row"></div>
             &nbsp;
             <div id="loading">
                 <i class="fa fa-spinner fa-spin fa-4x"></i>
             </div>
-            <div id="emptyMessage" class="row" style="display:none;">
+            <div id="emptyMessage-camp" class="row" style="display:none;">
                 <div class="alert alert-info">
                     No campaigns created yet. Let's create one!
                 </div>
@@ -49,7 +49,7 @@
         </div>
         <div role="tabpanel" class="tab-pane" id="archivedCampaigns">
             </br>
-            <div id="emptyMessage" class="row" style="display:none;">
+            <div id="emptyMessage-camp" class="row" style="display:none;">
                 </br>
                 <div class="alert alert-info">
                     No archived campaigns.
@@ -108,7 +108,7 @@
                             <label class="control-label" for="delay">Send Emails By (Optional)
                                 <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="If specified, Gophish will send emails evenly between the campaign launch and this date."></i>
                             </label>
-                            <input type="text" class="form-control" id="send_by_date" autocomplete="random-data"/> <!--Chrome ignores autocomplete="off".-->
+                            <input type="text" class="form-control" id="send_by_date" autocomplete="random-data"/> <!--Chrome ignores autocomplete="new-password".-->
                         </div>
                     </div>
                     <label class="control-label" for="profile">Sending Profile:</label>
