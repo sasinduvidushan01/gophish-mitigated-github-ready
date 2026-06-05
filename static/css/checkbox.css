@@ -49,7 +49,7 @@
 }
 .checkbox input[type="checkbox"]:checked + label::after,
 .checkbox input[type="radio"]:checked + label::after {
-  font-family: "FontAwesome";
+  font-family: "FontAwesome", sans-serif;
   content: "\f00c";
 }
 .checkbox input[type="checkbox"]:disabled + label,
@@ -239,7 +239,7 @@
 
 input[type="checkbox"].styled:checked + label:after,
 input[type="radio"].styled:checked + label:after {
-  font-family: 'FontAwesome';
+  font-family: 'FontAwesome', sans-serif;
   content: "\f00c";
 }
 input[type="checkbox"] .styled:checked + label::before,

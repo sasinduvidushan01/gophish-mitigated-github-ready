@@ -7,7 +7,7 @@
 }
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
-  font-family: 'Flat-UI-Icons';
+  font-family: 'Flat-UI-Icons', sans-serif;
   content: attr(data-icon);
   speak: none;
   font-weight: normal;
@@ -53,7 +53,7 @@ you can use the generic selector below, but it's slower:
 .fui-play,
 .fui-check-inverted-2 {
   display: inline-block;
-  font-family: 'Flat-UI-Icons';
+  font-family: 'Flat-UI-Icons', sans-serif;
   speak: none;
   font-style: normal;
   font-weight: normal;
