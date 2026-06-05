@@ -131,10 +131,10 @@ func (s *ModelsSuite) TestGetSmtpFrom(ch *check.C) {
 
 	msg := gomail.NewMessage()
 	err := req.Generate(msg)
-	smtp_from, err := req.GetSmtpFrom()
+	smtpFrom, err := req.GetSmtpFrom()
 
 	ch.Assert(err, check.Equals, nil)
-	ch.Assert(smtp_from, check.Equals, "from@example.com")
+	ch.Assert(smtpFrom, check.Equals, "from@example.com")
 }
 
 func (s *ModelsSuite) TestEmailRequestURLTemplating(ch *check.C) {

@@ -162,13 +162,13 @@ func sendMail(ctx context.Context, dialer Dialer, ms []Mail) {
 			continue
 		}
 
-		smtp_from, err := m.GetSmtpFrom()
+		smtpFrom, err := m.GetSmtpFrom()
 		if err != nil {
 			m.Error(err)
 			continue
 		}
 
-		err = gomail.SendCustomFrom(sender, smtp_from, message)
+		err = gomail.SendCustomFrom(sender, smtpFrom, message)
 		if err != nil {
 			if te, ok := err.(*textproto.Error); ok {
 				switch {

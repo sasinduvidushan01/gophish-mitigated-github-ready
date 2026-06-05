@@ -125,7 +125,7 @@ func ParseCSV(r *http.Request) ([]models.Target, error) {
 }
 
 // CheckAndCreateSSL is a helper to setup self-signed certificates for the administrative interface.
-func CheckAndCreateSSL(cp string, kp string) error {
+func CheckAndCreateSSL(cp, kp string) error {
 	// Check whether there is an existing SSL certificate and/or key, and if so, abort execution of this function
 	if _, err := os.Stat(cp); !os.IsNotExist(err) {
 		return nil
