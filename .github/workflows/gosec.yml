@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
       - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
+        uses: securego/gosec@9addc97cefc9460a114e3c36f536b935da3b98c9 # master branch
         with:
           # G104 (errors unhandled) is excluded - it is a code quality issue,
           # not a security vulnerability. All other rules are enforced.
