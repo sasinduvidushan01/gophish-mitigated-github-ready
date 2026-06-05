@@ -41,6 +41,9 @@ type AdminServer struct {
 	limiter *ratelimit.PostLimiter
 }
 
+// defaultTLSConfig enforces strong TLS settings for the admin server.
+// Only ECDHE cipher suites are included to ensure Perfect Forward Secrecy (PFS).
+// Legacy RSA key exchange ciphers have been removed as they do not provide PFS.
 var defaultTLSConfig = &tls.Config{
 	PreferServerCipherSuites: true,
 	CurvePreferences: []tls.CurveID{
@@ -55,10 +58,6 @@ var defaultTLSConfig = &tls.Config{
 		tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
 		tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
 		tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-
-		// Kept for backwards compatibility with some clients
-		tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
-		tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
 	},
 }
 

@@ -187,8 +187,11 @@ func (mbox *Mailbox) newClient() (*client.Client, error) {
 	var err error
 	restrictedDialer := dialer.Dialer()
 	if mbox.TLS {
+		// #nosec G402 -- InsecureSkipVerify is explicitly user-controlled via the
+		// "Ignore Certificate Errors" checkbox in the IMAP settings UI.
+		// Required to support internal corporate mail servers with self-signed certificates.
 		config := &tls.Config{
-			InsecureSkipVerify: mbox.IgnoreCertErrors,
+			InsecureSkipVerify: mbox.IgnoreCertErrors, // #nosec G402
 			MinVersion:         tls.VersionTLS13,
 		}
 		imapClient, err = client.DialWithDialerTLS(restrictedDialer, mbox.Host, config)

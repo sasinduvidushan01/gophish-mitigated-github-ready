@@ -41,7 +41,9 @@ func Setup(config *Config) error {
 	// Set up logging to a file if specified in the config
 	logFile := config.Filename
 	if logFile != "" {
-		f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+		// #nosec G304 -- logFile path comes from administrator-controlled config.json,
+		// not from any user-facing HTTP input. Path traversal risk is accepted for admin-level config.
+		f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0600)
 		if err != nil {
 			return err
 		}

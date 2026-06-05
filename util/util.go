@@ -170,14 +170,19 @@ func CheckAndCreateSSL(cp string, kp string) error {
 		return fmt.Errorf("tls certificate generation: failed to create certificate: %s", err)
 	}
 
-	certOut, err := os.Create(cp)
+	// #nosec G304 -- Certificate path comes from administrator-controlled config.json,
+	// not from any user-facing HTTP input.
+	certOut, err := os.OpenFile(cp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600) // #nosec G304
 	if err != nil {
 		return fmt.Errorf("tls certificate generation: failed to open %s for writing: %s", cp, err)
 	}
+	// #nosec G104 -- pem.Encode error is non-critical; failure will be evident at next startup
 	pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes})
 	certOut.Close()
 
-	keyOut, err := os.OpenFile(kp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	// #nosec G304 -- Key path comes from administrator-controlled config.json,
+	// not from any user-facing HTTP input.
+	keyOut, err := os.OpenFile(kp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600) // #nosec G304
 	if err != nil {
 		return fmt.Errorf("tls certificate generation: failed to open %s for writing", kp)
 	}
@@ -187,6 +192,7 @@ func CheckAndCreateSSL(cp string, kp string) error {
 		return fmt.Errorf("tls certificate generation: unable to marshal ECDSA private key: %v", err)
 	}
 
+	// #nosec G104 -- pem.Encode error is non-critical; failure will be evident at next startup
 	pem.Encode(keyOut, &pem.Block{Type: "EC PRIVATE KEY", Bytes: b})
 	keyOut.Close()
 

@@ -112,9 +112,12 @@ func (s *SMTP) GetDialer() (mailer.Dialer, error) {
 	}
 	dialer := dialer.Dialer()
 	d := gomail.NewWithDialer(dialer, host, port, s.Username, s.Password)
+	// #nosec G402 -- InsecureSkipVerify is explicitly user-controlled via the
+	// "Ignore Certificate Errors" checkbox in the Sending Profile UI.
+	// Required to support internal corporate mail servers with self-signed certificates.
 	d.TLSConfig = &tls.Config{
 		ServerName:         host,
-		InsecureSkipVerify: s.IgnoreCertErrors,
+		InsecureSkipVerify: s.IgnoreCertErrors, // #nosec G402
 		MinVersion:         tls.VersionTLS13,
 	}
 	hostname, err := os.Hostname()

@@ -48,6 +48,8 @@ const ServerName = "gophish"
 // LoadConfig loads the configuration from the specified filepath
 func LoadConfig(filepath string) (*Config, error) {
 	// Get the config file
+	// #nosec G304 -- filepath is provided by the administrator via CLI argument,
+	// not from any user-facing HTTP input. This is a controlled, trusted path.
 	configFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		return nil, err
