@@ -1,10 +1,5 @@
 package models
 
-const deletedStatus = "[Deleted]"
-const statusQuery = "status=?"
-const userIdQuery = "user_id = ?"
-const campaignIdQuery = "campaign_id=?"
-
 import (
 	"errors"
 	"net/url"
@@ -15,6 +10,11 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 )
+
+const deletedStatus = "[Deleted]"
+const statusQuery = "status=?"
+const userIdQuery = "user_id = ?"
+const campaignIdQuery = "campaign_id=?"
 
 // Campaign is a struct representing a created campaign
 type Campaign struct {

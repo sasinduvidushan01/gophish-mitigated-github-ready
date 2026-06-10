@@ -1,7 +1,5 @@
 package models
 
-const groupIdQuery = "group_id=?"
-
 import (
 	"errors"
 	"fmt"
@@ -12,6 +10,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 )
+
+const groupIdQuery = "group_id=?"
 
 // Group contains the fields needed for a user -> group mapping
 // Groups contain 1..* Targets

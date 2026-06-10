@@ -1,7 +1,5 @@
 package models
 
-const templateIdQuery = "template_id=?"
-
 import (
 	"errors"
 	"net/mail"
@@ -10,6 +8,8 @@ import (
 	log "github.com/gophish/gophish/logger"
 	"github.com/jinzhu/gorm"
 )
+
+const templateIdQuery = "template_id=?"
 
 // Template models hold the attributes for an email template to be sent to targets
 type Template struct {

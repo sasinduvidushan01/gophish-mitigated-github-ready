@@ -1,7 +1,5 @@
 package models
 
-const smtpIdQuery = "smtp_id=?"
-
 import (
 	"crypto/tls"
 	"errors"
@@ -17,6 +15,8 @@ import (
 	"github.com/gophish/gophish/mailer"
 	"github.com/jinzhu/gorm"
 )
+
+const smtpIdQuery = "smtp_id=?"
 
 // Dialer is a wrapper around a standard gomail.Dialer in order
 // to implement the mailer.Dialer interface. This allows us to better
