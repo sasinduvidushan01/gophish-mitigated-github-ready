@@ -1,7 +1,5 @@
 package api
 
-const campaignNotFound = "Campaign not found"
-
 import (
 	"encoding/json"
 	"net/http"
@@ -13,6 +11,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
+
+const campaignNotFound = "Campaign not found"
 
 // Campaigns returns a list of campaigns if requested via GET.
 // If requested via POST, APICampaigns creates a new campaign and returns a reference to it.

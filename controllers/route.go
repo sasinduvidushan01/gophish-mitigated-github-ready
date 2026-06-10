@@ -1,7 +1,5 @@
 package controllers
 
-const flashesTemplate = "templates/flashes.html"
-
 import (
 	"compress/gzip"
 	"context"
@@ -29,6 +27,8 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/jordan-wright/unindexed"
 )
+
+const flashesTemplate = "templates/flashes.html"
 
 // AdminServerOption is a functional option that is used to configure the
 // admin server
