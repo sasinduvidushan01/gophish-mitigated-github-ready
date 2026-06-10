@@ -1,13 +1,13 @@
 package dialer
 
-const zeroSixteen = "0.0/16"
-
 import (
 	"fmt"
 	"net"
 	"syscall"
 	"time"
 )
+
+const zeroSixteen = "0.0/16"
 
 // RestrictedDialer is used to create a net.Dialer which restricts outbound
 // connections to only allowlisted IP ranges.

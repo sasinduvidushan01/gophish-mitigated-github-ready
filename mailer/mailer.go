@@ -223,7 +223,7 @@ func sendMail(ctx context.Context, dialer Dialer, ms []Mail) { // NOSONAR
 			}
 		}
 		log.WithFields(logrus.Fields{
-			"smtp_from":     smtp_from,
+			"smtp_from":     smtpFrom,
 			"envelope_from": message.GetHeader("From")[0],
 			"email":         message.GetHeader("To")[0],
 		}).Info("Email sent")
