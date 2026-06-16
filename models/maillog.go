@@ -197,9 +197,8 @@ func (m *MailLog) Generate(msg *gomail.Message) error { // NOSONAR
 	}
 
 	// Add the transparency headers
-	msg.SetHeader("X-Mailer", config.ServerName)
 	if conf.ContactAddress != "" {
-		msg.SetHeader("X-Gophish-Contact", conf.ContactAddress)
+		msg.SetHeader("X-Contact", conf.ContactAddress)
 	}
 
 	// Add Message-Id header as described in RFC 2822.
